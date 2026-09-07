@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CV / Resume Builder
 
-## Getting Started
+A fast, Vercel-friendly resume & curriculum vitae builder built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **Zustand**.
 
-First, run the development server:
+Enter your details once, switch between five professional formats, customize the accent color, check common ATS risks, and export a crisp, print-ready **PDF** or an editable **DOCX** — 100% client-side, so it works seamlessly on Vercel serverless.
+
+## Features
+
+- **ATS self-check panel** — live pass/warn/fail review of parser risks (layout, missing sections, bullet length, photo, page count)
+- **Job keyword coverage** — paste a job description for a local comparison of common keywords against your resume
+- **Five templates** — Modern, Classic, Minimal, Sidebar, and ATS-Friendly
+- **Accent color picker** — restyle your whole document with one click
+- **ATS-Friendly format** — a strictly single-column, parser-safe layout for job portals
+- **Live A4 preview** — scaled to fit your editor, pixel-accurate to the export
+- **Full data model** — personal info, summary, experience, education, projects, skills, languages, certifications
+- **Reorderable lists** — add, remove, and reorder entries with a simple UI
+- **PDF export** — exact, vector, text-selectable output via the browser print dialog
+- **DOCX export** — downloadable, editable file compatible with Microsoft Word, Google Docs, LibreOffice, and Apple Pages
+- **Auto-save** — everything persists to `localStorage` (via Zustand `persist`)
+- **Privacy-first storage** — resume details, photos, and job descriptions stay in the browser; the app has no account or data-collection backend
+- **Sample data** — one click to load a realistic example
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Other scripts:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command           | Description                  |
+| ----------------- | ---------------------------- |
+| `npm run build`   | Production build             |
+| `npm run start`   | Run the production build     |
+| `npm run lint`    | Run ESLint                   |
 
-## Learn More
+## Exporting to PDF
 
-To learn more about Next.js, take a look at the following resources:
+Click **Download PDF** (or press `Ctrl/Cmd + P`). In the print dialog choose **“Save as PDF”** as the destination, set paper size to **A4** and margins to **None** for the best result. Because the resume is rendered as real DOM/CSS, the resulting PDF keeps vector text (selectable, searchable) and exact colors.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The export is handled entirely in the browser with print CSS — no server-side rendering of PDFs required, which is why it works out of the box on Vercel.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Exporting to DOCX
 
-## Deploy on Vercel
+Click **Export DOCX** to download a `.docx` file (Office Open XML) that opens and is fully editable in **Microsoft Word**, **Google Docs**, **LibreOffice**, and **Apple Pages**. The file includes your name, job title, contact line, summary, experience, education, projects, skills, languages, and certifications — formatted with section headings, bullet points, and right-aligned dates.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploying to Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Everything is static and client-side, so deploying is trivial:
+
+1. Push this repository to GitHub/GitLab/Bitbucket.
+2. Import it into [Vercel](https://vercel.com/new) — the framework preset **Next.js** is detected automatically.
+3. Click **Deploy**.
+
+No environment variables or serverless functions are required.
+
+You can also deploy via the CLI:
+
+```bash
+npm i -g vercel
+vercel
+```
+
+## License
+
+CVBuilder is released under the [MIT License](LICENSE). Copyright (c) 2026 Jacob Conrad Quendangan.
+
+## Project structure
+
+```
+app/                     # Next.js app router (root page + layout + globals.css)
+components/
+  BuilderPage.tsx        # 3-column layout: editor | live preview | ATS check
+  builder/
+    Topbar.tsx           # Template picker, accent colors, help, and download actions
+    FormPanel.tsx        # Tabbed data-entry panel (left column)
+    AtsCheckPanel.tsx    # Live ATS self-check and local keyword coverage (right column)
+    editors.tsx          # Section editors (personal, experience, …)
+    controls.tsx         # TextField, TextArea, SelectField building blocks
+    ItemList.tsx         # Reusable add / remove / reorder list editor
+    Preview.tsx          # Scaled A4 live preview (center column) + print root
+  resume/
+    Resume.tsx           # Template registry + selector
+    primitives.tsx       # Shared BulletList, DateRange, date helpers
+    templates/           # Modern, Classic, Minimal, Sidebar, Ats
+lib/
+  types.ts               # Data model + shared types
+  sample.ts              # Sample resume data
+  utils.ts               # cn() class helper
+  exportDocx.ts          # DOCX (Office Open XML) export generator
+store/
+  useResumeStore.ts      # Zustand store with localStorage persistence
+```
+
+## Adding a new template
+
+1. Create `components/resume/templates/YourTemplate.tsx` exporting a component typed as `TemplateProps` (receives `data` and `accent`).
+2. Register it in `components/resume/Resume.tsx` under a new `TemplateId`.
+3. Add your `TemplateId` to the `TemplateId` union in `lib/types.ts`.
+4. Add an option to the topbar dropdown in `components/builder/Topbar.tsx`.
+
+Templates are plain React + CSS, so anything that uses Tailwind utilities will appear identically in the exported PDF.
+
+## How printing / PDF generation works
+
+The resume is rendered inside `#resume-inner` at full A4 size (794 px wide) and visually scaled down for the editor. When printing, CSS in `app/globals.css`:
+
+- Sets `@page { size: A4; margin: 0 }`.
+- Hides all page UI and re-shows only `#resume-print`.
+- Resets the preview scaling so the document prints at natural size.
+- Enforces `print-color-adjust: exact` so template colors are preserved.
+
