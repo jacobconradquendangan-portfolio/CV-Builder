@@ -76,22 +76,23 @@ export function Topbar() {
           </span>
         </div>
 
-        <label className="flex min-w-0 items-center gap-2 text-xs font-medium text-slate-500">
-          Template
-          <select
-            value={templateId}
-            onChange={(event) => setTemplateId(event.target.value as TemplateId)}
-            className="max-w-[145px] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-          >
-            {TEMPLATE_OPTIONS.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="flex items-center gap-5 sm:mx-auto">
+          <label className="flex min-w-0 items-center gap-2 text-xs font-medium text-slate-500">
+            Template
+            <select
+              value={templateId}
+              onChange={(event) => setTemplateId(event.target.value as TemplateId)}
+              className="max-w-[145px] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            >
+              {TEMPLATE_OPTIONS.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Accent color">
+          <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Accent color">
           {ACCENTS.map((color) => (
             <button
               key={color.value}
@@ -106,6 +107,7 @@ export function Topbar() {
               style={{ backgroundColor: color.value }}
             />
           ))}
+          </div>
         </div>
       </div>
 
