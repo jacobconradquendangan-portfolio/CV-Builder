@@ -76,13 +76,13 @@ export function Topbar() {
           </span>
         </div>
 
-        <div className="flex items-center gap-5 sm:mx-auto">
-          <label className="flex min-w-0 items-center gap-2 text-xs font-medium text-slate-500">
+        <div className="flex w-full items-center justify-between gap-2 sm:mx-auto sm:w-auto sm:justify-center sm:gap-5">
+          <label className="flex min-w-0 flex-1 items-center gap-2 text-xs font-medium text-slate-500 sm:flex-none">
             Template
             <select
               value={templateId}
               onChange={(event) => setTemplateId(event.target.value as TemplateId)}
-              className="max-w-[145px] rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              className="min-w-0 flex-1 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 sm:max-w-[145px] sm:flex-none"
             >
               {TEMPLATE_OPTIONS.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -92,21 +92,37 @@ export function Topbar() {
             </select>
           </label>
 
-          <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Accent color">
-          {ACCENTS.map((color) => (
-            <button
-              key={color.value}
-              type="button"
-              title={color.name}
-              aria-label={`Accent ${color.name}`}
-              onClick={() => setAccent(color.value)}
-              className={cn(
-                "h-5 w-5 rounded-full border border-slate-300/80 transition-transform hover:scale-110",
-                accent === color.value && "ring-2 ring-slate-400 ring-offset-2"
-              )}
-              style={{ backgroundColor: color.value }}
-            />
-          ))}
+          <label className="flex min-w-0 flex-1 items-center gap-2 text-xs font-medium text-slate-500 sm:hidden">
+            Color
+            <select
+              value={accent}
+              onChange={(event) => setAccent(event.target.value)}
+              aria-label="Accent color"
+              className="min-w-0 flex-1 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-800"
+            >
+              {ACCENTS.map((color) => (
+                <option key={color.value} value={color.value}>
+                  {color.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="hidden items-center gap-1.5 sm:flex" role="radiogroup" aria-label="Accent color">
+            {ACCENTS.map((color) => (
+              <button
+                key={color.value}
+                type="button"
+                title={color.name}
+                aria-label={`Accent ${color.name}`}
+                onClick={() => setAccent(color.value)}
+                className={cn(
+                  "h-5 w-5 shrink-0 rounded-full border border-slate-300/80 transition-transform hover:scale-110",
+                  accent === color.value && "ring-2 ring-slate-400 ring-offset-2"
+                )}
+                style={{ backgroundColor: color.value }}
+              />
+            ))}
           </div>
         </div>
       </div>
