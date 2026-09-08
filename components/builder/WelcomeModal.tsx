@@ -113,6 +113,30 @@ export function WelcomeModal() {
               </li>
             ))}
           </ol>
+
+          <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-sm font-semibold text-slate-800">Found a bug or have feedback?</p>
+            <p className="mt-1 text-xs leading-relaxed text-slate-500">
+              This builder is actively being tested and improved. Tell me about formatting issues,
+              PDF export glitches, or feature ideas.
+            </p>
+            <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-medium">
+              <a
+                href="https://github.com/jacobconradquendangan-portfolio/CV-Builder/issues"
+                target="_blank"
+                rel="noreferrer"
+                className="text-indigo-600 hover:text-indigo-800 hover:underline"
+              >
+                Report a bug on GitHub
+              </a>
+              <a
+                href="mailto:jacobconradquendangan@gmail.com"
+                className="text-indigo-600 hover:text-indigo-800 hover:underline"
+              >
+                Send direct feedback
+              </a>
+            </div>
+          </div>
         </div>
 
         <div className="border-t border-slate-100 px-6 py-4">
