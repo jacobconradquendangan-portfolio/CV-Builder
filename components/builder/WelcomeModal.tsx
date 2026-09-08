@@ -66,7 +66,7 @@ export function WelcomeModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="welcome-title"
-        className="welcome-modal-scroll max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl sm:max-h-none sm:overflow-hidden"
+        className="welcome-modal-scroll max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl sm:max-h-[min(90vh,680px)]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-500 px-4 pb-4 pt-5 text-white sm:px-6 sm:pb-5 sm:pt-6">
@@ -76,7 +76,7 @@ export function WelcomeModal() {
           <h2 id="welcome-title" className="mt-2 text-2xl font-bold leading-snug">
             Build a job-ready resume in minutes
           </h2>
-          <p className="mt-1.5 text-sm leading-relaxed text-indigo-100">
+          <p className="mt-1.5 text-[13px] leading-relaxed text-indigo-100 sm:text-sm">
             A browser-based resume builder and ATS checker for students and job seekers. Your resume
             information and uploaded images stay on this device.
           </p>
@@ -95,7 +95,7 @@ export function WelcomeModal() {
                 <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-[9px] font-bold text-white">
                   ✓
                 </span>
-                <span className="text-xs leading-snug text-slate-700">{feature}</span>
+                <span className="text-[13px] leading-snug text-slate-700">{feature}</span>
               </li>
             ))}
           </ul>
@@ -109,7 +109,7 @@ export function WelcomeModal() {
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">
                   {index + 1}
                 </span>
-                <span className="text-xs leading-relaxed text-slate-600">{step}</span>
+                <span className="text-[13px] leading-relaxed text-slate-600">{step}</span>
               </li>
             ))}
           </ol>
