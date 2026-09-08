@@ -66,10 +66,10 @@ export function WelcomeModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="welcome-title"
-        className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="welcome-modal-scroll max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl sm:max-h-none sm:overflow-hidden"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-500 px-6 pb-5 pt-6 text-white">
+        <div className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-500 px-4 pb-4 pt-5 text-white sm:px-6 sm:pb-5 sm:pt-6">
           <span className="rounded-md bg-white/15 px-2 py-0.5 text-xs font-bold tracking-wide">
             Privacy-first web app
           </span>
@@ -82,7 +82,7 @@ export function WelcomeModal() {
           </p>
         </div>
 
-        <div className="px-6 py-5">
+        <div className="px-4 py-4 sm:px-6 sm:py-5">
           <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
             What you get
           </p>
@@ -139,7 +139,7 @@ export function WelcomeModal() {
           </div>
         </div>
 
-        <div className="border-t border-slate-100 px-6 py-4">
+        <div className="border-t border-slate-100 px-4 py-3 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={close}

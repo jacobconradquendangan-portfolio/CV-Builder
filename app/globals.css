@@ -20,6 +20,15 @@ body {
   color: var(--foreground);
 }
 
+.welcome-modal-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.welcome-modal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 /* Always render template colors when printing / saving as PDF. */
 * {
   -webkit-print-color-adjust: exact;
