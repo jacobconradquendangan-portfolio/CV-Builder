@@ -127,7 +127,7 @@ export function Topbar() {
         </div>
       </div>
 
-      <div className="flex w-full flex-wrap items-center gap-2 border-t border-slate-100 pt-2 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+      <div className="flex w-full flex-wrap items-center justify-end gap-2 border-t border-slate-100 pt-2 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
         <button type="button" onClick={loadSample} className={secondaryButton}>
           Load sample
         </button>
@@ -147,7 +147,7 @@ export function Topbar() {
         >
           Clear
         </button>
-        <div ref={downloadRef} className="relative">
+        <div ref={downloadRef} className="relative ml-auto">
           <button
             type="button"
             onClick={() => setDownloadOpen((open) => !open)}
