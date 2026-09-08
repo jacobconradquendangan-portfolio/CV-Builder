@@ -21,7 +21,7 @@ const TABS = [
   { id: "projects", label: "Projects" },
   { id: "skills", label: "Skills" },
   { id: "languages", label: "Languages" },
-  { id: "certifications", label: "Certifications" },
+  { id: "certifications", label: "Certs" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -53,7 +53,7 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
       )}
     >
       <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-3">
-        <div className="flex gap-1 overflow-x-auto">
+        <div className="grid grid-cols-4 gap-1.5 py-2">
           {TABS.map((tabItem) => {
             const active = tab === tabItem.id;
             return (
@@ -61,11 +61,12 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
                 key={tabItem.id}
                 type="button"
                 onClick={() => setTab(tabItem.id)}
+                title={tabItem.id === "certifications" ? "Certifications" : tabItem.label}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2.5 text-xs font-semibold transition-colors",
+                  "flex min-w-0 items-center justify-center gap-1 rounded-md border px-1.5 py-1.5 text-[11px] font-semibold transition-colors",
                   active
-                    ? "border-indigo-600 text-indigo-700"
-                    : "border-transparent text-slate-500 hover:text-slate-800"
+                    ? "border-indigo-200 bg-indigo-50 text-indigo-700"
+                    : "border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800"
                 )}
               >
                 {tabItem.label}
