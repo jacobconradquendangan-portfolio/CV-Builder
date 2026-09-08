@@ -19,6 +19,13 @@ Enter your details once, switch between five professional formats, customize the
 - **Auto-save** — everything persists to `localStorage` (via Zustand `persist`)
 - **Privacy-first storage** — resume details, photos, and job descriptions stay in the browser; the app has no account or data-collection backend
 - **Sample data** — one click to load a realistic example
+- **Mobile-friendly workspace** — responsive template and color controls, collapsible editor and preview views, mobile ATS drawer, and full-width resume preview
+
+## Mobile compatibility
+
+Version **1.0.1** improves the builder experience on phones and smaller screens. You can switch between the editor and preview, hide either workspace for a full-screen view, choose a template and accent color from mobile-friendly controls, and open the ATS check in a drawer.
+
+Mobile support is actively being tested and improved. Please report layout issues, export problems, or other feedback through the GitHub Issues link in the app's welcome guide.
 
 ## Getting started
 

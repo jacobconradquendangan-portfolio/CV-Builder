@@ -72,7 +72,7 @@ export function Topbar() {
             CV<span className="text-indigo-600">Builder</span>
           </h1>
           <span className="rounded-full border border-indigo-200 bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-indigo-700">
-            v1.0.0
+            v1.0.1
           </span>
         </div>
 
