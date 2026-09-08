@@ -69,7 +69,7 @@ export function BuilderPage() {
         <div className={previewOpen ? "contents" : "hidden lg:contents"}>
           <Preview />
         </div>
-        <aside className="hidden h-full w-[340px] shrink-0 overflow-y-auto border-l border-slate-200 bg-white xl:block">
+        <aside className="scrollbar-hidden hidden h-full w-[340px] shrink-0 overflow-y-auto border-l border-slate-200 bg-white xl:block">
           <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-3 py-2.5">
             <h2 className="text-sm font-semibold text-slate-800">ATS Check</h2>
             <p className="text-[11px] text-slate-500">

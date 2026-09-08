@@ -20,6 +20,15 @@ body {
   color: var(--foreground);
 }
 
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 .welcome-modal-scroll {
   scrollbar-width: none;
   -ms-overflow-style: none;

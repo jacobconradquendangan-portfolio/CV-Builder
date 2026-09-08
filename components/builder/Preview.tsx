@@ -51,7 +51,7 @@ export function Preview() {
   return (
     <div
       ref={viewportRef}
-      className="preview-viewport min-h-0 min-w-0 w-full flex-1 overflow-auto bg-slate-200/70 p-3 sm:p-6"
+      className="preview-viewport scrollbar-hidden min-h-0 min-w-0 w-full flex-1 overflow-auto bg-slate-200/70 p-3 sm:p-6"
     >
       <div
         className="resume-scale-wrap flex min-h-full w-full justify-center"

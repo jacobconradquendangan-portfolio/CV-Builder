@@ -48,7 +48,7 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
   return (
     <aside
       className={cn(
-        "w-full shrink-0 overflow-y-auto border-b border-slate-200 bg-white lg:h-full lg:w-[400px] lg:border-b-0 lg:border-r",
+        "scrollbar-hidden w-full shrink-0 overflow-y-auto border-b border-slate-200 bg-white lg:h-full lg:w-[400px] lg:border-b-0 lg:border-r",
         mobileFullHeight ? "h-full" : "h-1/2"
       )}
     >
