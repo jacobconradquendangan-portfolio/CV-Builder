@@ -48,6 +48,10 @@ body {
   overflow-wrap: anywhere;
 }
 
+#resume-inner {
+  max-width: none;
+}
+
 #resume-inner .flex > *,
 #resume-inner .grid > * {
   min-width: 0;

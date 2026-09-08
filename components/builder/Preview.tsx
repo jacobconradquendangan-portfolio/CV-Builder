@@ -22,7 +22,10 @@ export function Preview() {
     const viewport = viewportRef.current;
     if (!viewport) return;
     const measure = () => {
-      const width = Math.max(320, viewport.clientWidth - PAGE_PADDING);
+      const isMobile = window.innerWidth < 640;
+      const availableWidth = isMobile ? window.innerWidth : viewport.clientWidth;
+      const padding = isMobile ? 24 : PAGE_PADDING;
+      const width = Math.max(280, availableWidth - padding);
       setScale(Math.min(1, width / RESUME_WIDTH));
     };
     measure();
@@ -48,10 +51,10 @@ export function Preview() {
   return (
     <div
       ref={viewportRef}
-      className="preview-viewport flex-1 overflow-auto bg-slate-200/70 p-6"
+      className="preview-viewport min-w-0 w-full flex-1 overflow-auto bg-slate-200/70 p-3 sm:p-6"
     >
       <div
-        className="resume-scale-wrap flex min-h-full justify-center"
+        className="resume-scale-wrap flex min-h-full w-full justify-center"
         style={{ height: contentHeight * scale }}
       >
         <div
