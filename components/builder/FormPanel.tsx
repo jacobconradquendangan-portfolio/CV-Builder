@@ -26,7 +26,7 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]["id"];
 
-export function FormPanel() {
+export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boolean }) {
   const [tab, setTab] = useState<TabId>("personal");
 
   // useShallow must be invoked inside a component (it is a hook). It makes the
@@ -46,7 +46,12 @@ export function FormPanel() {
   );
 
   return (
-    <aside className="h-1/2 w-full shrink-0 overflow-y-auto border-b border-slate-200 bg-white lg:h-full lg:w-[400px] lg:border-b-0 lg:border-r">
+    <aside
+      className={cn(
+        "w-full shrink-0 overflow-y-auto border-b border-slate-200 bg-white lg:h-full lg:w-[400px] lg:border-b-0 lg:border-r",
+        mobileFullHeight ? "h-full" : "h-1/2"
+      )}
+    >
       <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-3">
         <div className="flex gap-1 overflow-x-auto">
           {TABS.map((tabItem) => {

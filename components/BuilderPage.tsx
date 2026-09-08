@@ -9,6 +9,8 @@ import { WelcomeModal } from "./builder/WelcomeModal";
 
 export function BuilderPage() {
   const [atsOpen, setAtsOpen] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(true);
+  const [previewOpen, setPreviewOpen] = useState(true);
 
   useEffect(() => {
     if (!atsOpen) return;
@@ -23,6 +25,36 @@ export function BuilderPage() {
     <div className="app-shell flex h-screen min-h-0 flex-col overflow-hidden bg-slate-100">
       <Topbar />
       <WelcomeModal />
+      <div className="flex shrink-0 gap-2 border-b border-slate-200 bg-white px-3 py-2 lg:hidden">
+        <button
+          type="button"
+          onClick={() => {
+            setEditorOpen((open) => !open);
+            if (editorOpen) setPreviewOpen(true);
+          }}
+          aria-expanded={editorOpen}
+          className="flex min-w-0 flex-1 items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+        >
+          <span>{editorOpen ? "Hide editor" : "Edit resume"}</span>
+          <span aria-hidden="true" className="text-base text-slate-400">
+            {editorOpen ? "↑" : "↓"}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setPreviewOpen((open) => !open);
+            if (previewOpen) setEditorOpen(true);
+          }}
+          aria-expanded={previewOpen}
+          className="flex min-w-0 flex-1 items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+        >
+          <span>{previewOpen ? "Hide preview" : "View preview"}</span>
+          <span aria-hidden="true" className="text-base text-slate-400">
+            {previewOpen ? "↑" : "↓"}
+          </span>
+        </button>
+      </div>
       <button
         type="button"
         onClick={() => setAtsOpen(true)}
@@ -31,8 +63,12 @@ export function BuilderPage() {
         ATS Check
       </button>
       <div className="app-main flex min-h-0 flex-1 flex-col lg:flex-row">
-        <FormPanel />
-        <Preview />
+        <div className={editorOpen ? "contents" : "hidden lg:contents"}>
+          <FormPanel mobileFullHeight={!previewOpen} />
+        </div>
+        <div className={previewOpen ? "contents" : "hidden lg:contents"}>
+          <Preview />
+        </div>
         <aside className="hidden h-full w-[340px] shrink-0 overflow-y-auto border-l border-slate-200 bg-white xl:block">
           <div className="sticky top-0 z-10 border-b border-slate-200 bg-white px-3 py-2.5">
             <h2 className="text-sm font-semibold text-slate-800">ATS Check</h2>
