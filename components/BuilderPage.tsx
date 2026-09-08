@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FormPanel } from "./builder/FormPanel";
 import { Preview } from "./builder/Preview";
 import { Topbar } from "./builder/Topbar";
@@ -7,10 +8,28 @@ import { AtsCheckPanel } from "./builder/AtsCheckPanel";
 import { WelcomeModal } from "./builder/WelcomeModal";
 
 export function BuilderPage() {
+  const [atsOpen, setAtsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!atsOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setAtsOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [atsOpen]);
+
   return (
     <div className="app-shell flex h-screen min-h-0 flex-col overflow-hidden bg-slate-100">
       <Topbar />
       <WelcomeModal />
+      <button
+        type="button"
+        onClick={() => setAtsOpen(true)}
+        className="fixed bottom-4 right-16 z-40 rounded-full border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-lg transition-colors hover:bg-slate-50 xl:hidden"
+      >
+        ATS Check
+      </button>
       <div className="app-main flex min-h-0 flex-1 flex-col lg:flex-row">
         <FormPanel />
         <Preview />
@@ -26,6 +45,39 @@ export function BuilderPage() {
           </div>
         </aside>
       </div>
+      {atsOpen && (
+        <div className="fixed inset-0 z-50 xl:hidden" role="dialog" aria-modal="true" aria-labelledby="mobile-ats-title">
+          <button
+            type="button"
+            aria-label="Close ATS check"
+            onClick={() => setAtsOpen(false)}
+            className="absolute inset-0 h-full w-full cursor-default bg-slate-900/45"
+          />
+          <aside className="welcome-modal-scroll absolute inset-y-0 right-0 w-[min(90vw,360px)] overflow-y-auto border-l border-slate-200 bg-white shadow-2xl">
+            <div className="sticky top-0 z-10 flex items-start justify-between border-b border-slate-200 bg-white px-4 py-3">
+              <div>
+                <h2 id="mobile-ats-title" className="text-sm font-semibold text-slate-800">
+                  ATS Check
+                </h2>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500">
+                  Live review of your resume for applicant tracking systems.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAtsOpen(false)}
+                aria-label="Close ATS check"
+                className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-200 text-lg leading-none text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+              >
+                ×
+              </button>
+            </div>
+            <div className="px-3 py-3">
+              <AtsCheckPanel />
+            </div>
+          </aside>
+        </div>
+      )}
     </div>
   );
 }
