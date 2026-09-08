@@ -5,7 +5,7 @@
   --foreground: #0f172a;
 }
 
-@theme inline {
+:root {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -108,6 +108,12 @@ body {
   #resume-print,
   #resume-print * {
     visibility: visible !important;
+  }
+
+  .print\:hidden,
+  .print\:hidden * {
+    display: none !important;
+    visibility: hidden !important;
   }
 
   #resume-print,
