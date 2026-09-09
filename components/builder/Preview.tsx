@@ -16,6 +16,14 @@ const A4_PAGE_HEIGHT = 1123;
 const PAGE_PADDING = 48; // py-12 on the resume root (top + bottom padding)
 const PRINTED_PAGE_HEIGHT = A4_PAGE_HEIGHT - PAGE_PADDING * 2;
 
+function estimatePageCount(contentHeight: number): number {
+  if (contentHeight <= 0) return 1;
+  // Count full A4 pages as they truly land on the page; adding the vertical
+  // padding back in here creates a phantom blank second page when the resume
+  // reaches the exact page height.
+  return Math.max(1, Math.ceil(contentHeight / A4_PAGE_HEIGHT));
+}
+
 export function Preview() {
   const data = useResumeStore((state) => state.data);
   const templateId = useResumeStore((state) => state.templateId);
@@ -57,7 +65,7 @@ export function Preview() {
     return () => observer.disconnect();
   }, [data, templateId, accent, setContentHeight]);
 
-  const pageCount = Math.max(1, Math.ceil((contentHeight + PAGE_PADDING * 2) / PRINTED_PAGE_HEIGHT));
+  const pageCount = estimatePageCount(contentHeight);
 
   return (
     <div
