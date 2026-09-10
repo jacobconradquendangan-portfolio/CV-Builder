@@ -12,7 +12,8 @@ Enter your details once, switch between five professional formats, customize the
 - **Accent color picker** — restyle your whole document with one click
 - **ATS-Friendly format** — a strictly single-column, parser-safe layout for job portals
 - **Live A4 preview** — scaled to fit your editor, pixel-accurate to the export
-- **Full data model** — personal info, summary, experience, education, projects, skills, languages, certifications, character references
+- **Full data model** — personal info, summary, experience, education, projects, skills, languages, certifications, awards & honors, character references
+- **Awards & Honors** — showcase achievements, recognition, and industry awards (ATS-friendly, great for keywords)
 - **Character references** — optional section for professional references with name, company, email, and phone (ATS-advised: provide upon request in most markets)
 - **Reorderable lists** — add, remove, and reorder entries with a simple UI
 - **PDF export** — exact, vector, text-selectable output via the browser print dialog
@@ -53,7 +54,7 @@ The export is handled entirely in the browser with print CSS — no server-side 
 
 ## Exporting to DOCX
 
-Click **Export DOCX** to download a `.docx` file (Office Open XML) that opens and is fully editable in **Microsoft Word**, **Google Docs**, **LibreOffice**, and **Apple Pages**. The file includes your name, job title, contact line, summary, experience, education, projects, skills, languages, certifications, and character references — formatted with section headings, bullet points, and right-aligned dates.
+Click **Export DOCX** to download a `.docx` file (Office Open XML) that opens and is fully editable in **Microsoft Word**, **Google Docs**, **LibreOffice**, and **Apple Pages**. The file includes your name, job title, contact line, summary, experience, education, projects, skills, languages, certifications, awards, and character references — formatted with section headings, bullet points, and right-aligned dates.
 
 ## Deploying to Vercel
 

@@ -62,6 +62,13 @@ export interface CharacterReference {
   phone: string;
 }
 
+export interface Award {
+  id: string;
+  name: string;
+  issuer: string;
+  year: string;
+}
+
 export type ListKey =
   | "experience"
   | "education"
@@ -69,7 +76,8 @@ export type ListKey =
   | "skills"
   | "languages"
   | "certifications"
-  | "characterReferences";
+  | "characterReferences"
+  | "awards";
 
 export type TemplateId = "modern" | "classic" | "minimal" | "sidebar" | "ats";
 
@@ -82,6 +90,7 @@ export interface ResumeData {
   languages: Language[];
   certifications: Certification[];
   characterReferences: CharacterReference[];
+  awards: Award[];
 }
 
 export interface TemplateProps {

@@ -29,6 +29,7 @@ function emptyResume(): ResumeData {
     languages: [],
     certifications: [],
     characterReferences: [],
+    awards: [],
   };
 }
 
@@ -70,6 +71,8 @@ function blankItem<K extends ListKey>(key: K): ResumeData[K][number] {
         email: "",
         phone: "",
       } as ResumeData[K][number];
+    case "awards":
+      return { id: uid(), name: "", issuer: "", year: "" } as ResumeData[K][number];
   }
 }
 
@@ -162,7 +165,7 @@ export const useResumeStore = create<ResumeState>()(
     }),
     {
       name: "cv-builder",
-      version: 3,
+      version: 4,
       migrate: (persistedState) => {
         const state = persistedState as ResumeState;
         return {
@@ -174,6 +177,7 @@ export const useResumeStore = create<ResumeState>()(
               photo: state.data.personal.photo ?? "",
             },
             characterReferences: state.data.characterReferences ?? [],
+            awards: state.data.awards ?? [],
           },
         };
       },

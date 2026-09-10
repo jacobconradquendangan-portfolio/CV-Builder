@@ -426,3 +426,47 @@ export function CharacterReferencesEditor() {
     </ItemList>
   );
 }
+
+export function AwardsEditor() {
+  const items = useResumeStore((state) => state.data.awards);
+  const updateItem = useResumeStore((state) => state.updateItem);
+  const addItem = useResumeStore((state) => state.addItem);
+  const removeItem = useResumeStore((state) => state.removeItem);
+  const moveItem = useResumeStore((state) => state.moveItem);
+
+  return (
+    <ItemList
+      items={items}
+      addLabel="Add award"
+      onAdd={() => addItem("awards")}
+      onRemove={(id) => removeItem("awards", id)}
+      onMove={(from, to) => moveItem("awards", from, to)}
+      formatLabel={(item, index) => item.name || `Award ${index + 1}`}
+    >
+      {(item) => (
+        <div className="pt-3">
+          <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
+            <TextField
+              label="Award"
+              value={item.name}
+              onChange={(value) => updateItem("awards", item.id, { name: value })}
+              placeholder="Best Design Award"
+            />
+            <TextField
+              label="Issuer"
+              value={item.issuer}
+              onChange={(value) => updateItem("awards", item.id, { issuer: value })}
+              placeholder="UX Philippines"
+            />
+            <TextField
+              label="Year"
+              value={item.year}
+              onChange={(value) => updateItem("awards", item.id, { year: value })}
+              placeholder="2023"
+            />
+          </div>
+        </div>
+      )}
+    </ItemList>
+  );
+}

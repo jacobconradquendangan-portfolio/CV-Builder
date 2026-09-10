@@ -4,12 +4,12 @@ import { accentFg } from "@/lib/utils";
 import { BulletList, DateRange, Photo } from "../primitives";
 
 export default function Sidebar({ data, accent }: TemplateProps) {
-  const { personal, experience, education, projects, skills, languages, certifications, characterReferences } = data;
+  const { personal, experience, education, projects, skills, languages, certifications, characterReferences, awards } = data;
   const ink = accentFg(accent);
 
   return (
     <div
-      className="min-h-[1123px] w-full bg-white font-sans text-slate-800"
+      className="min-h-[1123px] w-full bg-white font-sans text-slate-800 [&>*]:[box-decoration-break:clone]"
       style={{ "--accent": accent, "--accent-fg": ink } as CSSProperties}
     >
       <div className="h-1.5 w-full bg-[var(--accent-fg)]" />
@@ -24,8 +24,8 @@ export default function Sidebar({ data, accent }: TemplateProps) {
         )}
       </header>
 
-      <div className="flex">
-        <aside className="avoid-break w-[32%] border-r border-slate-200 px-7 py-7">
+      <div className="flex [box-decoration-break:clone]">
+        <aside className="w-[32%] border-r border-slate-200 px-7 py-7">
           <Photo src={personal.photo} className="mx-auto mb-5 h-24 w-24 border-4 border-slate-200 shadow-md" />
           <SideSection title="Contact">
             <ContactItem label="Email" value={personal.email} />
@@ -83,7 +83,7 @@ export default function Sidebar({ data, accent }: TemplateProps) {
           )}
         </aside>
 
-        <main className="flex-1 px-8 py-7">
+        <main className="flex-1 px-8 py-7 [box-decoration-break:clone]">
           {personal.summary.trim() && (
             <p className="text-[12.5px] leading-relaxed text-slate-600">{personal.summary}</p>
           )}
@@ -137,6 +137,20 @@ export default function Sidebar({ data, accent }: TemplateProps) {
                   <BulletList text={project.description} dotClassName="bg-[var(--accent-fg)] opacity-70" textClassName="text-[12px] text-slate-600" />
                 </div>
               ))}
+            </MainSection>
+          )}
+
+          {awards.some((award) => award.name.trim()) && (
+            <MainSection title="Awards & Honors">
+              {awards
+                .filter((award) => award.name.trim())
+                .map((award) => (
+                  <div key={award.id} className="avoid-break mb-4">
+                    <h3 className="text-[12.5px] font-bold text-slate-900">{award.name}</h3>
+                    {award.issuer && <p className="text-[11.5px] text-slate-600">{award.issuer}</p>}
+                    {award.year && <p className="text-[11.5px] text-slate-500">{award.year}</p>}
+                  </div>
+                ))}
             </MainSection>
           )}
 

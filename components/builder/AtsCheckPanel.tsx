@@ -121,7 +121,7 @@ export function AtsCheckPanel() {
 
   const checks = useMemo<Check[]>(() => {
     const { data, templateId, contentHeight } = snapshot;
-    const { personal, characterReferences } = data;
+    const { personal, characterReferences, awards } = data;
     const result: Check[] = [];
 
     if (templateId === "ats") {
@@ -312,6 +312,16 @@ export function AtsCheckPanel() {
               note: `${incompleteRefs.length} reference(s) missing email or phone. Tip: consider removing references from CV and providing upon request instead.`,
             }
       );
+    }
+
+    // Check for awards
+    if (awards.some((award) => award.name.trim())) {
+      result.push({
+        id: "awards",
+        label: "Awards & Honors",
+        status: "pass",
+        note: "Awards section found — great for showcasing achievements and keywords.",
+      });
     }
 
     return result;

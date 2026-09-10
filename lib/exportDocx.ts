@@ -187,6 +187,19 @@ export async function exportResumeToDocx(data: ResumeData): Promise<void> {
     }
   }
 
+  // ---- Awards & Honors ----
+  if (data.awards.some((award) => award.name.trim())) {
+    children.push(sectionHeading("AWARDS & HONORS"));
+    for (const award of data.awards) {
+      const parts = [
+        award.name,
+        ...(award.issuer.trim() ? [`— ${award.issuer}`] : []),
+        ...(award.year.trim() ? [award.year.trim()] : []),
+      ];
+      children.push(bulletParagraph(parts.join(" ")));
+    }
+  }
+
   // ---- Character References ----
   if (data.characterReferences.some((ref) => ref.name.trim())) {
     children.push(sectionHeading("CHARACTER REFERENCES"));

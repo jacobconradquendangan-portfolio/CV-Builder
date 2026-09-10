@@ -5,6 +5,7 @@ import { useShallow } from "zustand/react/shallow";
 import { cn } from "@/lib/utils";
 import { useResumeStore, type ResumeState } from "@/store/useResumeStore";
 import {
+  AwardsEditor,
   CertificationsEditor,
   CharacterReferencesEditor,
   EducationEditor,
@@ -23,6 +24,7 @@ const TABS: readonly { id: string; label: string; tooltip?: string }[] = [
   { id: "skills", label: "Skills" },
   { id: "languages", label: "Languages" },
   { id: "certifications", label: "Certs" },
+  { id: "awards", label: "Awards" },
   { id: "characterReferences", label: "Refs", tooltip: "Character references (optional)" },
 ] as const;
 
@@ -44,6 +46,7 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
       skills: state.data.skills.length,
       languages: state.data.languages.length,
       certifications: state.data.certifications.length,
+      awards: state.data.awards?.length ?? 0,
       characterReferences: state.data.characterReferences?.length ?? 0,
     }))
   );
@@ -103,6 +106,7 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
         {tab === "skills" && <SkillsEditor />}
         {tab === "languages" && <LanguagesEditor />}
         {tab === "certifications" && <CertificationsEditor />}
+        {tab === "awards" && <AwardsEditor />}
         {tab === "characterReferences" && <CharacterReferencesEditor />}
       </div>
     </aside>

@@ -139,7 +139,8 @@ body {
    * page fragment, giving every page the same gutters as the first page —
    * without changing how page 1 looks in print.
    */
-  #resume-inner > div {
+  #resume-inner > div,
+  #resume-inner > div > div {
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }

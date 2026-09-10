@@ -4,13 +4,13 @@ import { cn, isLightColor, accentFg } from "@/lib/utils";
 import { BulletList, DateRange, Photo } from "../primitives";
 
 export default function Modern({ data, accent }: TemplateProps) {
-  const { personal, experience, education, projects, skills, languages, certifications, characterReferences } = data;
+  const { personal, experience, education, projects, skills, languages, certifications, characterReferences, awards } = data;
   const lightAccent = isLightColor(accent);
   const ink = accentFg(accent);
 
   return (
     <div
-      className="flex min-h-[1123px] w-full bg-white font-sans text-slate-800"
+      className="flex min-h-[1123px] w-full bg-white font-sans text-slate-800 [&>*]:[box-decoration-break:clone]"
       style={{ "--accent": accent, "--accent-fg": ink } as CSSProperties}
     >
       <aside
@@ -171,6 +171,20 @@ export default function Modern({ data, accent }: TemplateProps) {
                 />
               </div>
             ))}
+          </MainSection>
+        )}
+
+        {awards.some((award) => award.name.trim()) && (
+          <MainSection title="Awards & Honors">
+            {awards
+              .filter((award) => award.name.trim())
+              .map((award) => (
+                <div key={award.id} className="avoid-break mb-4">
+                  <h3 className="text-[13px] font-bold text-slate-900">{award.name}</h3>
+                  {award.issuer && <p className="text-[11.5px] font-semibold text-[var(--accent-fg)]">{award.issuer}</p>}
+                  {award.year && <p className="text-[11.5px] text-slate-600">{award.year}</p>}
+                </div>
+              ))}
           </MainSection>
         )}
 

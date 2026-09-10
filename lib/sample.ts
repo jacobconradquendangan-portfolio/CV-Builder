@@ -102,4 +102,8 @@ export const sampleData: ResumeData = {
     { id: "cert-2", name: "Certified Usability Analyst", issuer: "HFI", year: "2020" },
   ],
   characterReferences: [],
+  awards: [
+    { id: "award-1", name: "Best Design Award", issuer: "UX Philippines", year: "2023" },
+    { id: "award-2", name: "Employee of the Year", issuer: "GCash", year: "2022" },
+  ],
 };
