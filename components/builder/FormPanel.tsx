@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useResumeStore, type ResumeState } from "@/store/useResumeStore";
 import {
   CertificationsEditor,
+  CharacterReferencesEditor,
   EducationEditor,
   ExperienceEditor,
   LanguagesEditor,
@@ -14,7 +15,7 @@ import {
   SkillsEditor,
 } from "./editors";
 
-const TABS = [
+const TABS: readonly { id: string; label: string; tooltip?: string }[] = [
   { id: "personal", label: "Personal" },
   { id: "experience", label: "Experience" },
   { id: "education", label: "Education" },
@@ -22,9 +23,10 @@ const TABS = [
   { id: "skills", label: "Skills" },
   { id: "languages", label: "Languages" },
   { id: "certifications", label: "Certs" },
+  { id: "characterReferences", label: "Refs", tooltip: "Character references (optional)" },
 ] as const;
 
-type TabId = (typeof TABS)[number]["id"];
+type TabId = (typeof TABS)[number]["id"] & string;
 
 export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boolean }) {
   const [tab, setTab] = useState<TabId>("personal");
@@ -42,6 +44,7 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
       skills: state.data.skills.length,
       languages: state.data.languages.length,
       certifications: state.data.certifications.length,
+      characterReferences: state.data.characterReferences?.length ?? 0,
     }))
   );
 
@@ -61,7 +64,11 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
                 key={tabItem.id}
                 type="button"
                 onClick={() => setTab(tabItem.id)}
-                title={tabItem.id === "certifications" ? "Certifications" : tabItem.label}
+                title={
+                  tabItem.id === "certifications"
+                    ? "Certifications"
+                    : tabItem.tooltip ?? tabItem.label
+                }
                 className={cn(
                   "flex min-w-0 items-center justify-center gap-1 rounded-md border px-1.5 py-1.5 text-[11px] font-semibold transition-colors",
                   active
@@ -74,12 +81,12 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
                   <span
                     className={cn(
                       "rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none",
-                      counts[tabItem.id] > 0
+                      counts[tabItem.id as keyof typeof counts] > 0
                         ? "bg-indigo-50 text-indigo-600"
                         : "bg-slate-100 text-slate-400"
                     )}
                   >
-                    {counts[tabItem.id]}
+                    {counts[tabItem.id as keyof typeof counts]}
                   </span>
                 )}
               </button>
@@ -96,6 +103,7 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
         {tab === "skills" && <SkillsEditor />}
         {tab === "languages" && <LanguagesEditor />}
         {tab === "certifications" && <CertificationsEditor />}
+        {tab === "characterReferences" && <CharacterReferencesEditor />}
       </div>
     </aside>
   );

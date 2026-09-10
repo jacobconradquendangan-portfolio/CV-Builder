@@ -28,6 +28,7 @@ function emptyResume(): ResumeData {
     skills: [],
     languages: [],
     certifications: [],
+    characterReferences: [],
   };
 }
 
@@ -61,6 +62,14 @@ function blankItem<K extends ListKey>(key: K): ResumeData[K][number] {
       return { id: uid(), name: "", level: "" } as ResumeData[K][number];
     case "certifications":
       return { id: uid(), name: "", issuer: "", year: "" } as ResumeData[K][number];
+    case "characterReferences":
+      return {
+        id: uid(),
+        name: "",
+        company: "",
+        email: "",
+        phone: "",
+      } as ResumeData[K][number];
   }
 }
 
@@ -153,7 +162,7 @@ export const useResumeStore = create<ResumeState>()(
     }),
     {
       name: "cv-builder",
-      version: 2,
+      version: 3,
       migrate: (persistedState) => {
         const state = persistedState as ResumeState;
         return {
@@ -164,6 +173,7 @@ export const useResumeStore = create<ResumeState>()(
               ...state.data.personal,
               photo: state.data.personal.photo ?? "",
             },
+            characterReferences: state.data.characterReferences ?? [],
           },
         };
       },

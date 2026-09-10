@@ -121,7 +121,7 @@ export function AtsCheckPanel() {
 
   const checks = useMemo<Check[]>(() => {
     const { data, templateId, contentHeight } = snapshot;
-    const { personal } = data;
+    const { personal, characterReferences } = data;
     const result: Check[] = [];
 
     if (templateId === "ats") {
@@ -290,6 +290,29 @@ export function AtsCheckPanel() {
             note: `${pages} pages — aim for 1-2 pages for best results.`,
           }
     );
+
+    // Check for character references completeness
+    const hasReferences = characterReferences.some((ref) => ref.name.trim());
+    if (hasReferences) {
+      const incompleteRefs = characterReferences.filter(
+        (ref) => ref.name.trim() && (!ref.email.trim() || !ref.phone.trim())
+      );
+      result.push(
+        incompleteRefs.length === 0
+          ? {
+              id: "characterReferences",
+              label: "Character references",
+              status: "pass",
+              note: "References included with complete details. Tip: optional in most markets — provide upon request instead to save space.",
+            }
+          : {
+              id: "characterReferences",
+              label: "Character references",
+              status: "warn",
+              note: `${incompleteRefs.length} reference(s) missing email or phone. Tip: consider removing references from CV and providing upon request instead.`,
+            }
+      );
+    }
 
     return result;
   }, [snapshot]);

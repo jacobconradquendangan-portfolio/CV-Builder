@@ -54,13 +54,22 @@ export interface Certification {
   year: string;
 }
 
+export interface CharacterReference {
+  id: string;
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+}
+
 export type ListKey =
   | "experience"
   | "education"
   | "projects"
   | "skills"
   | "languages"
-  | "certifications";
+  | "certifications"
+  | "characterReferences";
 
 export type TemplateId = "modern" | "classic" | "minimal" | "sidebar" | "ats";
 
@@ -72,6 +81,7 @@ export interface ResumeData {
   skills: Skill[];
   languages: Language[];
   certifications: Certification[];
+  characterReferences: CharacterReference[];
 }
 
 export interface TemplateProps {

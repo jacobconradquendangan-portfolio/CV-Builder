@@ -4,7 +4,7 @@ import { accentFg } from "@/lib/utils";
 import { BulletList, DateRange, Photo } from "../primitives";
 
 export default function Minimal({ data, accent }: TemplateProps) {
-  const { personal, experience, education, projects, skills, languages, certifications } = data;
+  const { personal, experience, education, projects, skills, languages, certifications, characterReferences } = data;
   const ink = accentFg(accent);
 
   return (
@@ -118,6 +118,21 @@ export default function Minimal({ data, accent }: TemplateProps) {
                   {cert.issuer}
                   {cert.year && ` · ${cert.year}`}
                 </span>
+              </div>
+            ))}
+        </Section>
+      )}
+
+      {characterReferences.some((ref) => ref.name.trim()) && (
+        <Section title="Character References">
+          {characterReferences
+            .filter((ref) => ref.name.trim())
+            .map((ref) => (
+              <div key={ref.id} className="avoid-break mb-3 text-[11.5px]">
+                <span className="font-semibold text-slate-800">{ref.name}</span>
+                {ref.company && <span className="text-slate-500">, {ref.company}</span>}
+                {ref.email && <div className="mt-0.5 text-slate-500">{ref.email}</div>}
+                {ref.phone && <div className="text-slate-500">{ref.phone}</div>}
               </div>
             ))}
         </Section>

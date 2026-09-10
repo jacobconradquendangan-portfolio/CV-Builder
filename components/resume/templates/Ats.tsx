@@ -16,7 +16,7 @@ import { BulletList, DateRange, Photo } from "../primitives";
  * flags this), but some regions / industries expect one — so the choice is yours.
  */
 export default function Ats({ data, accent }: TemplateProps) {
-  const { personal, experience, education, projects, skills, languages, certifications } = data;
+  const { personal, experience, education, projects, skills, languages, certifications, characterReferences } = data;
   const ink = accentFg(accent);
 
   const contactParts = [personal.email, personal.phone, personal.location, personal.website].filter(
@@ -145,6 +145,23 @@ export default function Ats({ data, accent }: TemplateProps) {
                 {cert.name}
                 {cert.issuer && ` — ${cert.issuer}`}
                 {cert.year && ` (${cert.year})`}
+              </div>
+            ))}
+        </Section>
+      )}
+
+      {characterReferences.some((ref) => ref.name.trim()) && (
+        <Section title="Character References">
+          {characterReferences
+            .filter((ref) => ref.name.trim())
+            .map((ref) => (
+              <div key={ref.id} className="avoid-break mb-3 text-[12px] leading-relaxed text-slate-700">
+                <span className="font-bold text-slate-900">{ref.name}</span>
+                {ref.company && <span>, {ref.company}</span>}
+                {ref.email && (
+                  <div className="mt-0.5 text-[11px] text-slate-600">{ref.email}</div>
+                )}
+                {ref.phone && <div className="text-[11px] text-slate-600">{ref.phone}</div>}
               </div>
             ))}
         </Section>

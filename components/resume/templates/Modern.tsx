@@ -4,7 +4,7 @@ import { cn, isLightColor, accentFg } from "@/lib/utils";
 import { BulletList, DateRange, Photo } from "../primitives";
 
 export default function Modern({ data, accent }: TemplateProps) {
-  const { personal, experience, education, projects, skills, languages, certifications } = data;
+  const { personal, experience, education, projects, skills, languages, certifications, characterReferences } = data;
   const lightAccent = isLightColor(accent);
   const ink = accentFg(accent);
 
@@ -171,6 +171,21 @@ export default function Modern({ data, accent }: TemplateProps) {
                 />
               </div>
             ))}
+          </MainSection>
+        )}
+
+        {characterReferences.some((ref) => ref.name.trim()) && (
+          <MainSection title="Character References">
+            {characterReferences
+              .filter((ref) => ref.name.trim())
+              .map((ref) => (
+                <div key={ref.id} className="avoid-break mb-4">
+                  <h3 className="text-[13px] font-bold text-slate-900">{ref.name}</h3>
+                  {ref.company && <p className="text-[11.5px] font-semibold text-[var(--accent-fg)]">{ref.company}</p>}
+                  {ref.email && <p className="text-[11.5px] text-slate-600">{ref.email}</p>}
+                  {ref.phone && <p className="text-[11.5px] text-slate-600">{ref.phone}</p>}
+                </div>
+              ))}
           </MainSection>
         )}
       </main>

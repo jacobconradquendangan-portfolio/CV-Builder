@@ -4,7 +4,7 @@ import { accentFg } from "@/lib/utils";
 import { BulletList, DateRange, Photo } from "../primitives";
 
 export default function Classic({ data, accent }: TemplateProps) {
-  const { personal, experience, education, projects, skills, languages } = data;
+  const { personal, experience, education, projects, skills, languages, characterReferences } = data;
   const ink = accentFg(accent);
 
   const contactParts = [personal.email, personal.phone, personal.location, personal.website].filter(
@@ -108,6 +108,22 @@ export default function Classic({ data, accent }: TemplateProps) {
               .map((language) => (language.level ? `${language.name} (${language.level})` : language.name))
               .join("   ·   ")}
           </p>
+        </>
+      )}
+
+      {characterReferences.some((ref) => ref.name.trim()) && (
+        <>
+          <SectionTitle title="Character References" />
+          {characterReferences
+            .filter((ref) => ref.name.trim())
+            .map((ref) => (
+              <div key={ref.id} className="avoid-break mb-4">
+                <h3 className="text-[13px] font-bold text-slate-900">{ref.name}</h3>
+                {ref.company && <p className="text-[12px] italic text-slate-600">{ref.company}</p>}
+                {ref.email && <p className="text-[11.5px] text-slate-600">{ref.email}</p>}
+                {ref.phone && <p className="text-[11.5px] text-slate-600">{ref.phone}</p>}
+              </div>
+            ))}
         </>
       )}
     </div>

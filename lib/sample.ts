@@ -101,4 +101,5 @@ export const sampleData: ResumeData = {
     { id: "cert-1", name: "Google UX Design Professional Certificate", issuer: "Google", year: "2021" },
     { id: "cert-2", name: "Certified Usability Analyst", issuer: "HFI", year: "2020" },
   ],
+  characterReferences: [],
 };

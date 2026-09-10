@@ -4,7 +4,7 @@ import { accentFg } from "@/lib/utils";
 import { BulletList, DateRange, Photo } from "../primitives";
 
 export default function Sidebar({ data, accent }: TemplateProps) {
-  const { personal, experience, education, projects, skills, languages, certifications } = data;
+  const { personal, experience, education, projects, skills, languages, certifications, characterReferences } = data;
   const ink = accentFg(accent);
 
   return (
@@ -137,6 +137,21 @@ export default function Sidebar({ data, accent }: TemplateProps) {
                   <BulletList text={project.description} dotClassName="bg-[var(--accent-fg)] opacity-70" textClassName="text-[12px] text-slate-600" />
                 </div>
               ))}
+            </MainSection>
+          )}
+
+          {characterReferences.some((ref) => ref.name.trim()) && (
+            <MainSection title="Character References">
+              {characterReferences
+                .filter((ref) => ref.name.trim())
+                .map((ref) => (
+                  <div key={ref.id} className="avoid-break mb-4">
+                    <h3 className="text-[12.5px] font-bold text-slate-900">{ref.name}</h3>
+                    {ref.company && <p className="text-[11.5px] text-slate-600">{ref.company}</p>}
+                    {ref.email && <p className="text-[11.5px] text-slate-600">{ref.email}</p>}
+                    {ref.phone && <p className="text-[11.5px] text-slate-600">{ref.phone}</p>}
+                  </div>
+                ))}
             </MainSection>
           )}
         </main>

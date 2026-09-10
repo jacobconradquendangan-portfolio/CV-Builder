@@ -375,3 +375,54 @@ export function CertificationsEditor() {
     </ItemList>
   );
 }
+
+export function CharacterReferencesEditor() {
+  const items = useResumeStore((state) => state.data.characterReferences);
+  const updateItem = useResumeStore((state) => state.updateItem);
+  const addItem = useResumeStore((state) => state.addItem);
+  const removeItem = useResumeStore((state) => state.removeItem);
+  const moveItem = useResumeStore((state) => state.moveItem);
+
+  return (
+    <ItemList
+      items={items}
+      addLabel="Add reference"
+      onAdd={() => addItem("characterReferences")}
+      onRemove={(id) => removeItem("characterReferences", id)}
+      onMove={(from, to) => moveItem("characterReferences", from, to)}
+      formatLabel={(item, index) => item.name || `Reference ${index + 1}`}
+    >
+      {(item) => (
+        <div className="pt-3">
+          <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
+            <TextField
+              label="Name"
+              value={item.name}
+              onChange={(value) => updateItem("characterReferences", item.id, { name: value })}
+              placeholder="Maria Santos"
+            />
+            <TextField
+              label="Company"
+              value={item.company}
+              onChange={(value) => updateItem("characterReferences", item.id, { company: value })}
+              placeholder="GCash (Mynt)"
+            />
+            <TextField
+              label="Email"
+              type="email"
+              value={item.email}
+              onChange={(value) => updateItem("characterReferences", item.id, { email: value })}
+              placeholder="maria.santos@example.com"
+            />
+            <TextField
+              label="Phone"
+              value={item.phone}
+              onChange={(value) => updateItem("characterReferences", item.id, { phone: value })}
+              placeholder="+63 917 555 0198"
+            />
+          </div>
+        </div>
+      )}
+    </ItemList>
+  );
+}

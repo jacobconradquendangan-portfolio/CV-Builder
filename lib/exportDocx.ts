@@ -187,6 +187,44 @@ export async function exportResumeToDocx(data: ResumeData): Promise<void> {
     }
   }
 
+  // ---- Character References ----
+  if (data.characterReferences.some((ref) => ref.name.trim())) {
+    children.push(sectionHeading("CHARACTER REFERENCES"));
+    for (const ref of data.characterReferences) {
+      if (!ref.name.trim()) continue;
+      children.push(
+        new Paragraph({
+          spacing: { before: 80, after: 40 },
+          children: [new TextRun({ text: ref.name, bold: true, size: 22, font: FONT })],
+        })
+      );
+      if (ref.company.trim()) {
+        children.push(
+          new Paragraph({
+            spacing: { after: 20 },
+            children: [new TextRun({ text: ref.company, italics: true, size: 20, color: "475569", font: FONT })],
+          })
+        );
+      }
+      if (ref.email.trim()) {
+        children.push(
+          new Paragraph({
+            spacing: { after: 20 },
+            children: [new TextRun({ text: `Email: ${ref.email}`, size: 20, color: "64748b", font: FONT })],
+          })
+        );
+      }
+      if (ref.phone.trim()) {
+        children.push(
+          new Paragraph({
+            spacing: { after: 40 },
+            children: [new TextRun({ text: `Phone: ${ref.phone}`, size: 20, color: "64748b", font: FONT })],
+          })
+        );
+      }
+    }
+  }
+
   const doc = new Document({
     styles: {
       default: { document: { run: { font: FONT, size: 21 } } },
