@@ -66,8 +66,8 @@ export function PersonalEditor() {
         onChange={(value) => setPersonal({ summary: value })}
         placeholder="Short introduction that sells your profile..."
       />
-      <p className="mt-4 rounded-md bg-indigo-50 px-3 py-2 text-xs leading-relaxed text-indigo-800">
-        Tip: click Download PDF and choose Save as PDF to export your resume as a print-ready document.
+      <p className="mt-5 rounded-2xl bg-[#0071e3]/[0.06] px-4 py-3 text-[13px] leading-relaxed text-[#1d1d1f]">
+        <span className="font-semibold">Tip —</span> <span className="text-[#3a3a3c]">click Download and choose Save as PDF for a print-ready document.</span>
       </p>
     </div>
   );

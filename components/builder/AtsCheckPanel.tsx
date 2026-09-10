@@ -324,50 +324,43 @@ export function AtsCheckPanel() {
   const passCount = checks.filter((check) => check.status === "pass").length;
 
   const verdict = failCount > 0 ? "Needs attention" : warnCount > 0 ? "Almost there" : "Looks great";
-  const verdictClasses = cn(
-    "rounded-full px-2.5 py-0.5 text-xs font-bold",
-    failCount > 0
-      ? "bg-rose-100 text-rose-700"
-      : warnCount > 0
-        ? "bg-amber-100 text-amber-800"
-        : "bg-emerald-100 text-emerald-700"
-  );
+  const verdictDot = failCount > 0 ? "bg-[#ff3b30]" : warnCount > 0 ? "bg-[#ff9f0a]" : "bg-[#34c759]";
 
   return (
-    <div>
-      <div className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
-        <div>
-          <p className="text-sm font-semibold text-slate-800">{verdict}</p>
-          <p className="text-[11px] text-slate-500">
-            {passCount} pass · {warnCount} warn · {failCount} fail
-          </p>
+    <div className="animate-fade space-y-3">
+      <div className="rounded-2xl border border-black/[0.08] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <div className="flex items-center gap-2.5">
+          <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", verdictDot)} />
+          <p className="text-[15px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{verdict}</p>
         </div>
-        <span className={verdictClasses}>{verdict}</span>
+        <p className="mt-1 pl-5 text-[12px] tabular-nums text-[#6e6e73]">
+          {passCount} pass · {warnCount} warn · {failCount} fail
+        </p>
       </div>
 
-      <p className="mb-3 rounded-md bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-500">
+      <p className="rounded-2xl bg-black/[0.04] px-4 py-3 text-[12px] leading-relaxed text-[#6e6e73]">
         A quick, opinionated review of how well your resume will survive automated applicant tracking
         systems. Adjust for the job you&apos;re applying to — a human reader still loves eye-catching layouts.
       </p>
 
-      <section className="mb-3 rounded-lg border border-slate-200 bg-white p-3">
+      <section className="rounded-2xl border border-black/[0.08] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
         <div className="mb-2 flex items-center justify-between gap-2">
           <div>
-            <h3 className="text-[13px] font-semibold text-slate-800">Job keyword match</h3>
-            <p className="text-[11px] text-slate-500">Paste a job description for a local comparison.</p>
+            <h3 className="text-[15px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">Job keyword match</h3>
+            <p className="text-[12px] text-[#6e6e73]">Paste a job description for a local comparison.</p>
           </div>
           {jobDescription.trim() && (
             <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-xs font-bold",
+                "shrink-0 rounded-full px-2.5 py-1 text-[12px] font-semibold tabular-nums",
                 keywordMatch.score >= 70
-                  ? "bg-emerald-100 text-emerald-700"
+                  ? "bg-[#34c759]/10 text-[#248a3d]"
                   : keywordMatch.score >= 40
-                    ? "bg-amber-100 text-amber-800"
-                    : "bg-rose-100 text-rose-700"
+                    ? "bg-[#ff9f0a]/10 text-[#b25000]"
+                    : "bg-[#ff3b30]/10 text-[#d70015]"
               )}
             >
-              {keywordMatch.score}% keyword coverage
+              {keywordMatch.score}%
             </span>
           )}
         </div>
@@ -377,19 +370,19 @@ export function AtsCheckPanel() {
           placeholder="Paste the job description here..."
           aria-label="Job description"
           rows={4}
-          className="w-full resize-y rounded-md border border-slate-300 px-2.5 py-2 text-xs leading-relaxed text-slate-700 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+          className="w-full resize-y rounded-[10px] border border-black/10 bg-[#f5f5f7]/60 px-3 py-2 text-[13px] leading-relaxed text-[#1d1d1f] outline-none transition-all duration-200 placeholder:text-[#aeaeb2] hover:bg-[#f5f5f7] focus:border-[#0071e3] focus:bg-white focus:ring-4 focus:ring-[#0071e3]/15"
         />
         {keywordMatch.keywords.length > 0 && (
           <div className="mt-2 space-y-2">
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[12px] text-[#6e6e73]">
               {keywordMatch.matched.length} of {keywordMatch.keywords.length} common keywords found. This is a local heuristic, not a guarantee of ATS results.
             </p>
             {keywordMatch.missing.length > 0 && (
               <div>
-                <p className="mb-1 text-[11px] font-semibold text-slate-600">Consider adding</p>
-                <div className="flex flex-wrap gap-1">
+                <p className="mb-1.5 text-[12px] font-semibold text-[#1d1d1f]">Consider adding</p>
+                <div className="flex flex-wrap gap-1.5">
                   {keywordMatch.missing.map((keyword) => (
-                    <span key={keyword} className="rounded bg-rose-50 px-1.5 py-0.5 text-[11px] text-rose-700">
+                    <span key={keyword} className="rounded-full bg-[#ff3b30]/10 px-2.5 py-1 text-[11px] font-medium text-[#d70015]">
                       {keyword}
                     </span>
                   ))}
@@ -400,14 +393,14 @@ export function AtsCheckPanel() {
         )}
       </section>
 
-      <ul className="space-y-1.5">
+      <ul className="space-y-2">
         {checks.map((check) => (
-          <li key={check.id} className="rounded-lg border border-slate-200 bg-white px-3 py-2">
-            <div className="flex items-center gap-2">
+          <li key={check.id} className="rounded-2xl border border-black/[0.08] bg-white px-4 py-3 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-shadow duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+            <div className="flex items-center gap-2.5">
               <StatusIcon status={check.status} />
-              <span className="text-[13px] font-medium text-slate-800">{check.label}</span>
+              <span className="text-[13px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{check.label}</span>
             </div>
-            <p className="mt-1 pl-6 text-[11px] leading-relaxed text-slate-500">{check.note}</p>
+            <p className="mt-1.5 pl-[28px] text-[12px] leading-relaxed text-[#6e6e73]">{check.note}</p>
           </li>
         ))}
       </ul>
@@ -419,10 +412,10 @@ function StatusIcon({ status }: { status: Status }) {
   return (
     <span
       className={cn(
-        "flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white",
-        status === "pass" && "bg-emerald-500",
-        status === "warn" && "bg-amber-500",
-        status === "fail" && "bg-rose-500"
+        "flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white",
+        status === "pass" && "bg-[#34c759]",
+        status === "warn" && "bg-[#ff9f0a]",
+        status === "fail" && "bg-[#ff3b30]"
       )}
     >
       {status === "pass" ? "✓" : status === "warn" ? "!" : "×"}

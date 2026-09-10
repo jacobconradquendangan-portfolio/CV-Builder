@@ -54,19 +54,19 @@ export function Preview() {
   return (
     <div
       ref={viewportRef}
-      className="preview-viewport scrollbar-hidden relative min-h-0 min-w-0 w-full flex-1 overflow-auto bg-slate-200/70 p-3 sm:p-6"
+      className="preview-viewport scrollbar-hidden relative min-h-0 min-w-0 w-full flex-1 overflow-auto bg-[#e8e8ed] p-3 sm:p-8"
     >
-      <div className="mx-auto mb-3 flex max-w-[794px] items-center justify-between text-xs font-medium text-slate-600 print:hidden">
-        <span className="flex items-center gap-1.5 rounded-full border border-slate-300/80 bg-white/90 px-2.5 py-1 shadow-xs backdrop-blur-xs">
+      <div className="glass mx-auto mb-4 flex max-w-[794px] items-center justify-between rounded-full py-1.5 pl-3 pr-1.5 shadow-[0_2px_12px_rgba(0,0,0,0.08)] print:hidden">
+        <span className="flex items-center gap-2 text-[13px] font-medium text-[#1d1d1f]">
           <span
             className={
-              pageCount === 1 ? "h-2 w-2 rounded-full bg-emerald-500" : "h-2 w-2 rounded-full bg-amber-500"
+              pageCount === 1 ? "h-2 w-2 rounded-full bg-[#34c759]" : "h-2 w-2 rounded-full bg-[#ff9f0a]"
             }
           />
-          {pageCount === 1 ? "Single Page (A4)" : `${pageCount} Pages (A4)`}
+          {pageCount === 1 ? "Single Page · A4" : `${pageCount} Pages · A4`}
         </span>
-        <span className="text-[11px] text-slate-500">
-          Scale: {Math.round(scale * 100)}%
+        <span className="rounded-full bg-black/[0.05] px-2.5 py-1 text-[11px] font-semibold tabular-nums text-[#6e6e73]">
+          {Math.round(scale * 100)}%
         </span>
       </div>
 
@@ -76,7 +76,7 @@ export function Preview() {
       >
         <div
           id="resume-print"
-          className="relative shadow-xl"
+          className="relative overflow-hidden rounded-[4px] shadow-[0_8px_40px_rgba(0,0,0,0.18),0_2px_8px_rgba(0,0,0,0.12)] ring-1 ring-black/10"
           style={{ width: RESUME_WIDTH * scale, height: contentHeight * scale }}
         >
           <div
@@ -105,9 +105,9 @@ export function Preview() {
                 className="print:hidden pointer-events-none absolute left-0 right-0 z-20 flex items-center"
                 style={{ top: `${topPx}px` }}
               >
-                <div className="w-full border-b-2 border-dashed border-rose-500 shadow-xs" />
-                <span className="absolute right-3 -translate-y-1/2 rounded-md bg-rose-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-md">
-                  PDF Page {pageNum} / {pageNum + 1} Cutoff
+                <div className="w-full border-b-2 border-dashed border-[#ff3b30]/70" />
+                <span className="absolute right-3 -translate-y-1/2 rounded-full bg-[#1d1d1f]/85 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-white shadow-lg backdrop-blur">
+                  Page {pageNum} / {pageNum + 1}
                 </span>
               </div>
             );

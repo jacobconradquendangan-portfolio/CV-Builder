@@ -28,7 +28,7 @@ const ACCENTS = [
 ];
 
 const secondaryButton =
-  "rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50";
+  "rounded-full border border-black/10 bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur transition-all duration-200 hover:bg-white active:scale-[0.98]";
 
 export function Topbar() {
   const templateId = useResumeStore((state) => state.templateId);
@@ -37,7 +37,6 @@ export function Topbar() {
   const setAccent = useResumeStore((state) => state.setAccent);
   const loadSample = useResumeStore((state) => state.loadSample);
   const clear = useResumeStore((state) => state.clear);
-  const setWelcomeOpen = useResumeStore((state) => state.setWelcomeOpen);
   const data = useResumeStore((state) => state.data);
 
   const handleExportDocx = async () => {
@@ -65,24 +64,33 @@ export function Topbar() {
   }, [downloadOpen]);
 
   return (
-    <header className="z-20 flex shrink-0 flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-slate-200 bg-white px-3 py-2.5 sm:px-4">
+    <header className="glass-strong sticky top-0 z-20 flex shrink-0 flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-black/[0.08] px-3 py-2.5 sm:px-5">
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-2">
-        <div className="flex items-center gap-2">
-          <h1 className="text-lg font-bold tracking-tight text-slate-900">
-            CV<span className="text-indigo-600">Builder</span>
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-gradient-to-b from-[#2c2c2e] to-black text-[13px] font-bold text-white shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
+            C
+          </span>
+          <h1 className="text-[17px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
+            CV Builder
           </h1>
-          <span className="rounded-full border border-indigo-200 bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-indigo-700">
+          <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73]">
             v1.0.1
           </span>
         </div>
 
         <div className="flex w-full items-center justify-between gap-2 sm:mx-auto sm:w-auto sm:justify-center sm:gap-5">
-          <label className="flex min-w-0 flex-1 items-center gap-2 text-xs font-medium text-slate-500 sm:flex-none">
+          <label className="flex min-w-0 flex-1 items-center gap-2 text-[13px] text-[#6e6e73] sm:flex-none">
             Template
             <select
               value={templateId}
               onChange={(event) => setTemplateId(event.target.value as TemplateId)}
-              className="min-w-0 flex-1 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 sm:max-w-[145px] sm:flex-none"
+              className="min-w-0 flex-1 cursor-pointer appearance-none rounded-full border border-black/10 bg-white/70 py-1.5 pl-3 pr-8 text-[13px] font-medium text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur transition-all duration-200 hover:bg-white focus:border-[#0071e3] focus:outline-none focus:ring-4 focus:ring-[#0071e3]/15 sm:max-w-[150px] sm:flex-none"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236e6e73' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "right 12px center",
+              }}
             >
               {TEMPLATE_OPTIONS.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -92,13 +100,13 @@ export function Topbar() {
             </select>
           </label>
 
-          <label className="flex min-w-0 flex-1 items-center gap-2 text-xs font-medium text-slate-500 sm:hidden">
+          <label className="flex min-w-0 flex-1 items-center gap-2 text-[13px] text-[#6e6e73] sm:hidden">
             Color
             <select
               value={accent}
               onChange={(event) => setAccent(event.target.value)}
               aria-label="Accent color"
-              className="min-w-0 flex-1 rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-800"
+              className="min-w-0 flex-1 cursor-pointer rounded-full border border-black/10 bg-white/70 px-3 py-1.5 text-[13px] font-medium text-[#1d1d1f]"
             >
               {ACCENTS.map((color) => (
                 <option key={color.value} value={color.value}>
@@ -108,7 +116,7 @@ export function Topbar() {
             </select>
           </label>
 
-          <div className="hidden items-center gap-1.5 sm:flex" role="radiogroup" aria-label="Accent color">
+          <div className="hidden items-center gap-2 rounded-full border border-black/[0.08] bg-white/60 px-2.5 py-1.5 backdrop-blur sm:flex" role="radiogroup" aria-label="Accent color">
             {ACCENTS.map((color) => (
               <button
                 key={color.value}
@@ -117,33 +125,24 @@ export function Topbar() {
                 aria-label={`Accent ${color.name}`}
                 onClick={() => setAccent(color.value)}
                 className={cn(
-                  "h-5 w-5 shrink-0 rounded-full border border-slate-300/80 transition-transform hover:scale-110",
-                  accent === color.value && "ring-2 ring-slate-400 ring-offset-2"
+                  "h-[18px] w-[18px] shrink-0 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                  accent === color.value && "ring-2 ring-[#0071e3] ring-offset-2 ring-offset-white"
                 )}
-                style={{ backgroundColor: color.value }}
+                style={{ backgroundColor: color.value, boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.12)" }}
               />
             ))}
           </div>
         </div>
       </div>
 
-      <div className="flex w-full flex-wrap items-center justify-end gap-2 border-t border-slate-100 pt-2 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+      <div className="flex w-full flex-wrap items-center justify-end gap-2 border-t border-black/[0.06] pt-2 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
         <button type="button" onClick={loadSample} className={secondaryButton}>
           Load sample
         </button>
         <button
           type="button"
-          onClick={() => setWelcomeOpen(true)}
-          aria-label="Open welcome guide"
-          title="Open welcome guide"
-          className="fixed bottom-4 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-600 shadow-lg transition-colors hover:bg-slate-50 hover:text-slate-900"
-        >
-          ?
-        </button>
-        <button
-          type="button"
           onClick={clear}
-          className={cn(secondaryButton, "hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600")}
+          className={cn(secondaryButton, "hover:border-red-300 hover:bg-red-50 hover:text-red-600")}
         >
           Clear
         </button>
@@ -153,7 +152,7 @@ export function Topbar() {
             onClick={() => setDownloadOpen((open) => !open)}
             aria-haspopup="menu"
             aria-expanded={downloadOpen}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#0071e3] px-4 py-2 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(0,113,227,0.35)] transition-all duration-200 hover:bg-[#0077ed] hover:shadow-[0_4px_12px_rgba(0,113,227,0.4)] active:scale-[0.97]"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 3v12" />
@@ -166,7 +165,7 @@ export function Topbar() {
             </svg>
           </button>
           {downloadOpen && (
-            <div role="menu" className="absolute right-0 z-30 mt-1.5 w-56 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
+            <div role="menu" className="animate-fade absolute right-0 z-30 mt-2 w-60 overflow-hidden rounded-2xl border border-black/[0.08] bg-white/90 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.16)] backdrop-blur-xl">
               <button
                 type="button"
                 role="menuitem"
@@ -174,35 +173,39 @@ export function Topbar() {
                   setDownloadOpen(false);
                   window.print();
                 }}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[#1d1d1f] transition-colors hover:bg-black/[0.04]"
               >
-                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <path d="M14 2v6h6" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                </svg>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-[#0071e3]/10 text-[#0071e3]">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <path d="M14 2v6h6" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                  </svg>
+                </span>
                 <span>
-                  <span className="block font-medium">Save as PDF</span>
-                  <span className="block text-[11px] text-slate-400">Best for printing &amp; final submission</span>
+                  <span className="block text-[13px] font-semibold">Save as PDF</span>
+                  <span className="block text-[11px] text-[#6e6e73]">Best for printing &amp; final submission</span>
                 </span>
               </button>
               <button
                 type="button"
                 role="menuitem"
                 onClick={handleExportDocx}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[#1d1d1f] transition-colors hover:bg-black/[0.04]"
               >
-                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                  <polyline points="10 9 9 9 8 9" />
-                </svg>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-[#34c759]/10 text-[#248a3d]">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10 9 9 9 8 9" />
+                  </svg>
+                </span>
                 <span>
-                  <span className="block font-medium">Save as DOCX</span>
-                  <span className="block text-[11px] text-slate-400">Editable in Word &amp; Google Docs</span>
+                  <span className="block text-[13px] font-semibold">Save as DOCX</span>
+                  <span className="block text-[11px] text-[#6e6e73]">Editable in Word &amp; Google Docs</span>
                 </span>
               </button>
             </div>

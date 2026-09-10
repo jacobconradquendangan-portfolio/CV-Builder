@@ -81,7 +81,7 @@ export function PhotoUploader() {
   };
 
   return (
-    <div className="mt-3 flex items-start gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-3">
+    <div className="mt-4 flex items-start gap-4 rounded-2xl bg-[#f5f5f7] p-4">
       {photo ? (
         // Uploaded photos are local data: URLs that can't use next/image.
 
@@ -89,10 +89,10 @@ export function PhotoUploader() {
         <img
           src={photo}
           alt="Profile photo preview"
-          className="h-20 w-20 shrink-0 rounded-full border border-slate-200 object-cover shadow-sm"
+          className="h-20 w-20 shrink-0 rounded-full object-cover shadow-[0_2px_8px_rgba(0,0,0,0.12)] ring-1 ring-black/10"
         />
       ) : (
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-slate-300 bg-white text-slate-300">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-black/15 bg-white text-[#aeaeb2]">
           <svg
             viewBox="0 0 24 24"
             className="h-8 w-8"
@@ -115,7 +115,7 @@ export function PhotoUploader() {
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={busy}
-            className="rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full bg-[#0071e3] px-3.5 py-1.5 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(0,113,227,0.3)] transition-all duration-200 hover:bg-[#0077ed] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {busy ? "Processing…" : photo ? "Replace photo" : "Upload photo"}
           </button>
@@ -126,7 +126,7 @@ export function PhotoUploader() {
                 setPersonal({ photo: "" });
                 setError("");
               }}
-              className="rounded-md px-2.5 py-1.5 text-xs font-semibold text-rose-600 transition-colors hover:bg-rose-50"
+              className="rounded-full px-3.5 py-1.5 text-[13px] font-medium text-[#d70015] transition-colors hover:bg-[#ff3b30]/10"
             >
               Remove
             </button>
@@ -144,7 +144,7 @@ export function PhotoUploader() {
           }}
         />
 
-        <label className="mt-2.5 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+        <label className="mt-3 block text-[12px] font-medium text-[#6e6e73]">
           Photo URL (optional)
         </label>
         <input
@@ -152,10 +152,10 @@ export function PhotoUploader() {
           value={photo.startsWith("data:") ? "" : photo}
           onChange={(event) => setPersonal({ photo: event.target.value })}
           placeholder="https://example.com/photo.jpg"
-          className="mt-1 w-full rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+          className="mt-1.5 w-full rounded-[10px] border border-black/10 bg-white px-3 py-2 text-[14px] text-[#1d1d1f] placeholder:text-[#aeaeb2] transition-all duration-200 focus:border-[#0071e3] focus:outline-none focus:ring-4 focus:ring-[#0071e3]/15"
         />
-        {error && <p className="mt-1.5 text-[11px] font-medium text-rose-600">{error}</p>}
-        <p className="mt-1.5 text-[11px] leading-relaxed text-slate-400">
+        {error && <p className="mt-1.5 text-[12px] font-medium text-[#d70015]">{error}</p>}
+        <p className="mt-1.5 text-[12px] leading-relaxed text-[#aeaeb2]">
           Uploads are resized (max 640 px) and saved with your resume — your photos never leave the browser.
         </p>
       </div>
