@@ -167,18 +167,30 @@ export const useResumeStore = create<ResumeState>()(
       name: "cv-builder",
       version: 4,
       migrate: (persistedState) => {
-        const state = persistedState as ResumeState;
+        const state = (persistedState ?? {}) as Partial<ResumeState>;
+        const data = (state.data ?? {}) as Partial<ResumeData>;
+        const personal = (data.personal ?? {}) as Partial<Personal>;
         return {
           ...state,
           data: {
-            ...state.data,
+            ...emptyResume(),
+            ...data,
             personal: {
-              ...state.data.personal,
-              photo: state.data.personal.photo ?? "",
+              ...emptyResume().personal,
+              ...personal,
+              photo: personal.photo ?? "",
             },
-            characterReferences: state.data.characterReferences ?? [],
-            awards: state.data.awards ?? [],
+            experience: data.experience ?? [],
+            education: data.education ?? [],
+            projects: data.projects ?? [],
+            skills: data.skills ?? [],
+            languages: data.languages ?? [],
+            certifications: data.certifications ?? [],
+            characterReferences: data.characterReferences ?? [],
+            awards: data.awards ?? [],
           },
+          templateId: state.templateId ?? "modern",
+          accent: state.accent ?? DEFAULT_ACCENT,
         };
       },
       // Persist only the resume content, not transient UI state (contentHeight).

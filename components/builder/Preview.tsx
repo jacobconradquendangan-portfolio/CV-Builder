@@ -3,26 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Resume } from "@/components/resume/Resume";
 import { useResumeStore } from "@/store/useResumeStore";
+import { PAGE_PADDING, PRINTED_PAGE_HEIGHT, estimatePageCount } from "@/lib/utils";
 
 export const RESUME_WIDTH = 794;
 export const PAGE_HEIGHT = 1123;
-/**
- * The printed resume root uses vertical padding on every page fragment. In the
- * browser print layout, the break threshold is the A4 height minus that padding,
- * not just the top edge. This keeps the preview cutoff aligned with the actual
- * page break before sections such as Skills land on the next page.
- */
-const A4_PAGE_HEIGHT = 1123;
-const PAGE_PADDING = 48; // py-12 on the resume root (top + bottom padding)
-const PRINTED_PAGE_HEIGHT = A4_PAGE_HEIGHT - PAGE_PADDING * 2;
-
-function estimatePageCount(contentHeight: number): number {
-  if (contentHeight <= 0) return 1;
-  // Count full A4 pages as they truly land on the page; adding the vertical
-  // padding back in here creates a phantom blank second page when the resume
-  // reaches the exact page height.
-  return Math.max(1, Math.ceil(contentHeight / A4_PAGE_HEIGHT));
-}
 
 export function Preview() {
   const data = useResumeStore((state) => state.data);
@@ -110,8 +94,10 @@ export function Preview() {
           {/* Visual Page Break Line Indicators */}
           {Array.from({ length: pageCount - 1 }).map((_, index) => {
             const pageNum = index + 1;
-            // Align each cutoff marker with the same printed-page height used for
-            // the page count calculation, including the repeated top padding.
+            // Markers use the printed-page height (A4 minus the repeated
+            // top/bottom gutter) so they line up with where the browser
+            // actually breaks the page; the page count itself uses the full
+            // A4 height to avoid a phantom blank page at exact multiples.
             const topPx = pageNum * PRINTED_PAGE_HEIGHT * scale;
             return (
               <div

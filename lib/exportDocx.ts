@@ -12,7 +12,7 @@ import {
   TextRun,
 } from "docx";
 import type { ResumeData } from "./types";
-import { prettyDate } from "../components/resume/primitives";
+import { prettyDate } from "./utils";
 
 const FONT = "Calibri";
 

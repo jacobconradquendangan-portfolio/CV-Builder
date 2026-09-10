@@ -35,7 +35,8 @@ function downscaleImage(file: File): Promise<string> {
           }
           // JPEG has no alpha channel — fill white so transparent images don't turn black.
 
-          const useJpeg = !file.type.endsWith("png");
+          const normalizedType = file.type.toLowerCase();
+          const useJpeg = normalizedType === "image/jpeg" || normalizedType === "image/webp";
           if (useJpeg) {
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, width, height);

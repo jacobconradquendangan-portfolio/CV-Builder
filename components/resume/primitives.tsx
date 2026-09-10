@@ -1,31 +1,7 @@
-import { cn } from "@/lib/utils";
+import { cn, prettyDate } from "@/lib/utils";
 
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-export function prettyDate(value?: string): string {
-  const raw = (value ?? "").trim();
-  if (!raw) return "";
-  if (/^\d{4}$/.test(raw)) return raw;
-  const match = raw.match(/^(\d{4})-(\d{1,2})$/);
-  if (match) {
-    const monthIndex = Number(match[2]) - 1;
-    if (monthIndex >= 0 && monthIndex < 12) return `${MONTHS[monthIndex]} ${match[1]}`;
-  }
-  return raw;
-}
+// Re-exported for backwards compatibility (older imports resolve via primitives).
+export { prettyDate };
 
 export function DateRange({
   start,

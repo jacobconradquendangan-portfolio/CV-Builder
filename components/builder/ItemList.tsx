@@ -50,13 +50,12 @@ function IconButton({
 
 interface SortableItemProps {
   id: string;
-  index: number;
   label: string;
   onRemove: () => void;
   children: ReactNode;
 }
 
-function SortableItem({ id, index, label, onRemove, children }: SortableItemProps) {
+function SortableItem({ id, label, onRemove, children }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -116,7 +115,7 @@ function SortableItem({ id, index, label, onRemove, children }: SortableItemProp
       </div>
       <details className="border-t border-slate-100">
         <summary className="list-none cursor-pointer px-3 py-2 text-xs font-medium text-slate-500 hover:text-slate-700 [&::-webkit-details-marker]:hidden">
-          {index === 0 ? "Edit" : "Edit"}
+          Edit
         </summary>
         <div className="px-3 pb-3">{children}</div>
       </details>
@@ -178,7 +177,6 @@ export function ItemList<T extends { id: string }>({
             <SortableItem
               key={item.id}
               id={item.id}
-              index={index}
               label={formatLabel ? formatLabel(item, index) : `Item ${index + 1}`}
               onRemove={() => onRemove(item.id)}
             >

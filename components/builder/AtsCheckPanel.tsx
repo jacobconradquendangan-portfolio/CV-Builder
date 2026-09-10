@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { cn } from "@/lib/utils";
+import { cn, estimatePageCount } from "@/lib/utils";
 import type { ResumeData } from "@/lib/types";
 import { useResumeStore, type ResumeState } from "@/store/useResumeStore";
 
@@ -13,14 +13,6 @@ interface Check {
   label: string;
   status: Status;
   note: string;
-}
-
-/** A4 height in CSS pixels at 96dpi (794 x 1123). */
-const PAGE_HEIGHT = 1123;
-
-function estimatePages(contentHeight: number): number {
-  if (contentHeight <= 0) return 1;
-  return Math.max(1, Math.ceil(contentHeight / PAGE_HEIGHT));
 }
 
 function longestLine(text: string): number {
@@ -274,7 +266,7 @@ export function AtsCheckPanel() {
         : { id: "photo", label: "Profile photo", status: "pass", note: "None set — recommended for ATS." }
     );
 
-    const pages = estimatePages(contentHeight);
+    const pages = estimatePageCount(contentHeight);
     result.push(
       pages <= 2
         ? {
