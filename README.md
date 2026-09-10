@@ -60,6 +60,17 @@ vercel
 
 Released under the [MIT License](LICENSE). Copyright (c) 2026 Jacob Conrad Quendangan.
 
+## Changelog
+
+### v1.1.0
+
+- Refined interface — frosted-glass topbar, pill buttons, segmented tabs, refined cards, and updated Preview / ATS / Welcome surfaces (resume templates and PDF/DOCX output unchanged)
+- Fixed Classic template missing the Certifications section
+- Fixed page-count math shared between Preview and ATS Check (`lib/utils.ts` single source of truth)
+- Hardened persisted-state migration against corrupt `localStorage`
+- Cleaned up ItemList toggle and PhotoUploader type check
+- Moved `prettyDate` into `lib/utils.ts` (re-exported from primitives for compatibility)
+
 ## Project structure
 
 ```

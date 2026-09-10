@@ -74,7 +74,7 @@ export function Topbar() {
             CV Builder
           </h1>
           <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73]">
-            v1.0.1
+            v1.1.0
           </span>
         </div>
 
