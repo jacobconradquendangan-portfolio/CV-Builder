@@ -8,7 +8,7 @@ A fast, privacy-first resume and CV builder built with **Next.js**, **TypeScript
 - **ATS self-check** — live pass/warn/fail review of parser risks (layout, missing sections, bullet length, page count)
 - **Job keyword coverage** — paste a job description to compare keywords against your resume
 - **Live A4 preview** — pixel-accurate, scaled editor with page-break indicators
-- **Accent color picker** — restyle the entire document with one click
+- **Accent color picker** — 10 presets plus a custom color picker (desktop toolbar) to restyle the document
 - **PDF export** — vector, text-selectable output via the browser print dialog
 - **DOCX export** — editable file compatible with Word, Google Docs, LibreOffice, and Pages
 - **Full data model** — personal info, summary, experience, education, projects, skills, languages, certifications, awards, and character references
