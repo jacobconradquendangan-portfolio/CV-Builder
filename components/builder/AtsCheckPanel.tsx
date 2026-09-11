@@ -401,16 +401,14 @@ export function AtsCheckPanel() {
       .map((line) => line.trim().replace(/^[-•*>]|\d+[.)\]}:]/, "").trim())
       .filter(Boolean);
     const maxLine = bullets.reduce((max, bullet) => Math.max(max, bullet.length), 0);
-    result.push(
+    if (bullets.length > 0) {
+      result.push(
       maxLine <= 160
         ? {
             id: "bullets",
             label: "Bullet length",
             status: "pass",
-            note:
-              bullets.length === 0
-                ? "No bullets yet — one line per achievement keeps resumes scannable."
-                : `${bullets.length} ${bullets.length === 1 ? "bullet" : "bullets"} checked — each stays within ~2 lines (longest ${maxLine} chars).`,
+            note: `${bullets.length} ${bullets.length === 1 ? "bullet" : "bullets"} checked — each stays within ~2 lines (longest ${maxLine} chars).`,
           }
         : {
             id: "bullets",
@@ -418,7 +416,8 @@ export function AtsCheckPanel() {
             status: "warn",
             note: `Longest bullet is ${maxLine} characters — split it so each bullet stays within ~2 lines.`,
           }
-    );
+      );
+    }
 
     result.push(
       personal.photo?.trim()
