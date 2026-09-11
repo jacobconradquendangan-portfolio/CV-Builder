@@ -7,7 +7,7 @@ const STORAGE_KEY = "cv-builder-welcome-seen";
 
 const FEATURES = [
   "5 resume templates — Modern, Classic, Minimal, Sidebar & ATS-Friendly",
-  "10 accent colors, including plain black & white",
+  "10 accent colors plus a custom color picker (desktop toolbar)",
   "Optional photo upload (stored on your device only)",
   "Export as PDF (text-selectable) or DOCX (editable)",
   "Live ATS self-check panel on the right",
@@ -17,7 +17,7 @@ const FEATURES = [
 
 const STEPS = [
   "Fill in your details — use the tabs on the left to add experience, education, skills, projects and more.",
-  "Style your resume — pick one of 5 templates and 10 accent colors; the preview updates live. Use the ATS panel for parser warnings and optional job-keyword coverage.",
+  "Style your resume — pick one of 5 templates and 10 accent colors (or any custom color via the rainbow picker on desktop); the preview updates live. Use the ATS panel for parser warnings and optional job-keyword coverage.",
   "Download — click Download and choose PDF (text-selectable, print-ready) or DOCX (editable in Word / Google Docs).",
 ];
 

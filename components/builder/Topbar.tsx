@@ -39,6 +39,12 @@ export function Topbar() {
   const clear = useResumeStore((state) => state.clear);
   const data = useResumeStore((state) => state.data);
 
+  const normalizedAccent = accent.toLowerCase();
+  const selectedColor = ACCENTS.find((color) => color.value.toLowerCase() === normalizedAccent);
+  const isCustomAccent = !selectedColor;
+  // <input type="color"> only accepts #rrggbb — fall back when accent is malformed.
+  const colorInputValue = /^#[0-9a-f]{6}$/i.test(accent) ? accent : "#4f46e5";
+
   const handleExportDocx = async () => {
     try {
       await exportResumeToDocx(data);
@@ -103,8 +109,10 @@ export function Topbar() {
           <label className="flex min-w-0 flex-1 items-center gap-2 text-[13px] text-[#6e6e73] sm:hidden">
             Color
             <select
-              value={accent}
-              onChange={(event) => setAccent(event.target.value)}
+              value={selectedColor?.value ?? "custom"}
+              onChange={(event) => {
+                if (event.target.value !== "custom") setAccent(event.target.value);
+              }}
               aria-label="Accent color"
               className="min-w-0 flex-1 cursor-pointer rounded-full border border-black/10 bg-white/70 px-3 py-1.5 text-[13px] font-medium text-[#1d1d1f]"
             >
@@ -113,24 +121,64 @@ export function Topbar() {
                   {color.name}
                 </option>
               ))}
+              {isCustomAccent && <option value="custom">Custom ({accent})</option>}
             </select>
           </label>
 
-          <div className="hidden items-center gap-2 rounded-full border border-black/[0.08] bg-white/60 px-2.5 py-1.5 backdrop-blur sm:flex" role="radiogroup" aria-label="Accent color">
-            {ACCENTS.map((color) => (
-              <button
-                key={color.value}
-                type="button"
-                title={color.name}
-                aria-label={`Accent ${color.name}`}
-                onClick={() => setAccent(color.value)}
-                className={cn(
-                  "h-[18px] w-[18px] shrink-0 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
-                  accent === color.value && "ring-2 ring-[#0071e3] ring-offset-2 ring-offset-white"
-                )}
-                style={{ backgroundColor: color.value, boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.12)" }}
+          <div className="hidden items-center gap-1 rounded-full border border-black/[0.08] bg-white/60 px-1.5 py-1.5 backdrop-blur sm:flex" role="radiogroup" aria-label="Accent color">
+            {ACCENTS.map((color) => {
+              const isSelected = color.value.toLowerCase() === normalizedAccent;
+              return (
+                <button
+                  key={color.value}
+                  type="button"
+                  title={color.name}
+                  aria-label={`Accent ${color.name}`}
+                  aria-pressed={isSelected}
+                  onClick={() => setAccent(color.value)}
+                  className={cn(
+                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                    isSelected && "bg-[#0071e3]/10"
+                  )}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "block h-[18px] w-[18px] rounded-full transition-all duration-200",
+                      isSelected
+                        ? "ring-2 ring-[#0071e3] ring-offset-2 ring-offset-white"
+                        : "ring-1 ring-black/15"
+                    )}
+                    style={{ backgroundColor: color.value }}
+                  />
+                </button>
+              );
+            })}
+            <label
+              title={isCustomAccent ? `Custom color ${accent} (selected)` : "Pick a custom color"}
+              className={cn(
+                "relative flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                isCustomAccent && "bg-[#0071e3]/10"
+              )}
+            >
+              <span className="sr-only">Pick a custom accent color</span>
+              <input
+                type="color"
+                value={colorInputValue}
+                onChange={(event) => setAccent(event.target.value)}
+                aria-label="Pick a custom accent color"
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
               />
-            ))}
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "pointer-events-none flex h-[18px] w-[18px] items-center justify-center rounded-full text-[10px] font-bold",
+                  isCustomAccent
+                    ? "bg-[conic-gradient(from_0deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)] ring-2 ring-[#0071e3] ring-offset-2 ring-offset-white"
+                    : "bg-[conic-gradient(from_0deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)] ring-1 ring-black/15"
+                )}
+              />
+            </label>
           </div>
         </div>
       </div>
