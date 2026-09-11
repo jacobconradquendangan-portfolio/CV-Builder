@@ -15,11 +15,8 @@ interface Check {
   note: string;
 }
 
-function longestLine(text: string): number {
-  return text
-    .split("\n")
-    .map((line) => line.trim().length)
-    .reduce((max, length) => Math.max(max, length), 0);
+function longestLine(_text: string): number {
+  return 0;
 }
 
 const KEYWORD_STOP_WORDS = new Set([
@@ -398,20 +395,28 @@ export function AtsCheckPanel() {
           }
     );
 
-    const maxLine = Math.max(
-      0,
-      ...data.experience.map((entry) => longestLine(entry.description)),
-      ...data.projects.map((project) => longestLine(project.description)),
-      ...data.education.map((item) => longestLine(item.description))
-    );
+    const bullets = [data.experience, data.projects, data.education]
+      .flatMap((section) => section.map((entry) => entry.description))
+      .flatMap((text) => text.split("\n"))
+      .map((line) => line.trim().replace(/^[-•*>]|\d+[.)\]}:]/, "").trim())
+      .filter(Boolean);
+    const maxLine = bullets.reduce((max, bullet) => Math.max(max, bullet.length), 0);
     result.push(
       maxLine <= 160
-        ? { id: "bullets", label: "Bullet length", status: "pass", note: "Bullets stay under ~2 lines each." }
+        ? {
+            id: "bullets",
+            label: "Bullet length",
+            status: "pass",
+            note:
+              bullets.length === 0
+                ? "No bullets yet — one line per achievement keeps resumes scannable."
+                : `${bullets.length} ${bullets.length === 1 ? "bullet" : "bullets"} checked — each stays within ~2 lines (longest ${maxLine} chars).`,
+          }
         : {
             id: "bullets",
             label: "Bullet length",
             status: "warn",
-            note: `Longest bullet is ${maxLine} characters — keep bullets concise and scannable.`,
+            note: `Longest bullet is ${maxLine} characters — split it so each bullet stays within ~2 lines.`,
           }
     );
 
