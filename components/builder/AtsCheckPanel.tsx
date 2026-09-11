@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { cn, estimatePageCount } from "@/lib/utils";
+import { cn, estimatePageCount, prettyDate } from "@/lib/utils";
 import type { ResumeData } from "@/lib/types";
 import { useResumeStore, type ResumeState } from "@/store/useResumeStore";
 
@@ -26,24 +26,70 @@ const KEYWORD_STOP_WORDS = new Set([
   "about",
   "after",
   "again",
+  "all",
   "also",
+  "and",
+  "any",
+  "are",
+  "because",
   "been",
   "before",
   "being",
   "between",
+  "both",
+  "but",
+  "can",
+  "candidate",
+  "company",
   "could",
+  "day",
+  "each",
+  "etc",
+  "experience",
+  "few",
+  "for",
   "from",
+  "further",
+  "had",
+  "has",
   "have",
+  "having",
+  "her",
+  "here",
+  "him",
+  "his",
+  "how",
+  "including",
   "into",
+  "its",
+  "job",
+  "join",
+  "joining",
+  "looking",
   "more",
   "most",
   "must",
+  "not",
+  "now",
+  "one",
+  "only",
   "other",
   "our",
+  "out",
   "over",
+  "per",
+  "position",
+  "requirements",
+  "responsibilities",
   "role",
+  "same",
   "should",
+  "some",
+  "such",
+  "team",
+  "than",
   "that",
+  "the",
   "their",
   "them",
   "these",
@@ -51,26 +97,78 @@ const KEYWORD_STOP_WORDS = new Set([
   "this",
   "those",
   "through",
+  "under",
+  "until",
   "using",
+  "very",
+  "via",
+  "was",
+  "were",
   "what",
   "when",
   "where",
   "which",
+  "while",
+  "who",
+  "whom",
   "will",
   "with",
+  "within",
   "work",
+  "working",
   "would",
+  "years",
+  "you",
   "your",
 ]);
 
-function extractKeywords(text: string): string[] {
-  const counts = new Map<string, number>();
+/**
+ * Canonical forms so full month names in a job posting match the 3-letter
+ * labels the resume renders ("February" -> "feb" matches "Feb 2021"),
+ * and "current"/"ongoing" match the "Present" end-date label.
+ */
+const TOKEN_ALIASES: Record<string, string> = {
+  january: "jan",
+  february: "feb",
+  march: "mar",
+  april: "apr",
+  june: "jun",
+  july: "jul",
+  august: "aug",
+  september: "sep",
+  sept: "sep",
+  october: "oct",
+  november: "nov",
+  december: "dec",
+  current: "present",
+  currently: "present",
+  ongoing: "present",
+  presently: "present",
+};
+
+/**
+ * Tokenizes free text the same way for both the job description and the
+ * resume so matches are apples-to-apples. Keeps tech tokens like c++,
+ * c#, node.js and ci/cd intact.
+ */
+function tokenize(text: string): string[] {
   const terms = text.toLowerCase().match(/[a-z0-9][a-z0-9+#./-]{2,}/g) ?? [];
+  const tokens: string[] = [];
 
   for (const term of terms) {
-    const keyword = term.replace(/^[./-]+|[./-]+$/g, "");
-    if (!keyword || KEYWORD_STOP_WORDS.has(keyword) || /^\d+$/.test(keyword)) continue;
-    counts.set(keyword, (counts.get(keyword) ?? 0) + 1);
+    const stripped = term.replace(/^[./-]+|[./-]+$/g, "");
+    if (!stripped || KEYWORD_STOP_WORDS.has(stripped) || /^\d+$/.test(stripped)) continue;
+    tokens.push(TOKEN_ALIASES[stripped] ?? stripped);
+  }
+
+  return tokens;
+}
+
+function extractKeywords(text: string): string[] {
+  const counts = new Map<string, number>();
+
+  for (const token of tokenize(text)) {
+    counts.set(token, (counts.get(token) ?? 0) + 1);
   }
 
   return [...counts.entries()]
@@ -79,8 +177,61 @@ function extractKeywords(text: string): string[] {
     .map(([keyword]) => keyword);
 }
 
-function getResumeSearchText(data: ResumeData): string {
-  return JSON.stringify(data).toLowerCase();
+/**
+ * Collects only human-visible resume content for keyword matching.
+ * Deliberately omits JSON keys, item ids, and personal.photo (a base64
+ * data: URL whose random alphabet otherwise matches arbitrary keywords).
+ */
+function collectResumeText(data: ResumeData): string {
+  const parts: string[] = [
+    data.personal.fullName,
+    data.personal.jobTitle,
+    data.personal.email,
+    data.personal.phone,
+    data.personal.location,
+    data.personal.website,
+    data.personal.summary,
+  ];
+
+  for (const job of data.experience) {
+    const startLabel = prettyDate(job.startDate);
+    const endLabel = (job.endDate ?? "").trim() ? prettyDate(job.endDate) : "Present";
+    parts.push(job.role, job.company, job.location, job.description, startLabel, endLabel);
+  }
+  for (const item of data.education) {
+    const startLabel = prettyDate(item.startDate);
+    const endLabel = (item.endDate ?? "").trim() ? prettyDate(item.endDate) : "Present";
+    parts.push(item.degree, item.school, item.location, item.description, startLabel, endLabel);
+  }
+  for (const project of data.projects) {
+    parts.push(project.name, project.link, project.description);
+  }
+  for (const skill of data.skills) {
+    parts.push(skill.name);
+  }
+  for (const language of data.languages) {
+    parts.push(language.name, language.level);
+  }
+  for (const cert of data.certifications) {
+    parts.push(cert.name, cert.issuer, cert.year);
+  }
+  for (const award of data.awards) {
+    parts.push(award.name, award.issuer, award.year);
+  }
+  for (const ref of data.characterReferences) {
+    parts.push(ref.name, ref.company, ref.email, ref.phone);
+  }
+
+  return parts.filter(Boolean).join("\n");
+}
+
+/**
+ * Exact-token set of the resume. Matching uses Set.has (word boundaries)
+ * instead of String.includes (substring) so "art" no longer matches
+ * "part"/"support", "java" no longer matches "javascript", etc.
+ */
+function getResumeTokenSet(data: ResumeData): Set<string> {
+  return new Set(tokenize(collectResumeText(data)));
 }
 
 export function AtsCheckPanel() {
@@ -99,9 +250,9 @@ export function AtsCheckPanel() {
       return { keywords, matched: [], missing: [], score: 0 };
     }
 
-    const resumeText = getResumeSearchText(snapshot.data);
-    const matched = keywords.filter((keyword) => resumeText.includes(keyword));
-    const missing = keywords.filter((keyword) => !resumeText.includes(keyword));
+    const resumeTokens = getResumeTokenSet(snapshot.data);
+    const matched = keywords.filter((keyword) => resumeTokens.has(keyword));
+    const missing = keywords.filter((keyword) => !resumeTokens.has(keyword));
 
     return {
       keywords,
