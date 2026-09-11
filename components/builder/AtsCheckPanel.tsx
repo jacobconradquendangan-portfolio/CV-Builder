@@ -350,17 +350,26 @@ export function AtsCheckPanel() {
           }
     );
 
-    const undated = data.experience.filter((entry) => !entry.startDate.trim() && !entry.endDate.trim());
-    result.push(
-      data.experience.length === 0 || undated.length === 0
-        ? { id: "experience-dates", label: "Dates on experience", status: "pass", note: "All entries have dates." }
-        : {
-            id: "experience-dates",
-            label: "Dates on experience",
-            status: "warn",
-            note: `${undated.length} entr${undated.length === 1 ? "y is" : "ies are"} missing dates.`,
-          }
-    );
+    if (data.experience.length > 0) {
+      const undated = data.experience.filter(
+        (entry) => !entry.startDate.trim() && !entry.endDate.trim()
+      );
+      result.push(
+        undated.length === 0
+          ? {
+              id: "experience-dates",
+              label: "Dates on experience",
+              status: "pass",
+              note: "All entries have dates.",
+            }
+          : {
+              id: "experience-dates",
+              label: "Dates on experience",
+              status: "warn",
+              note: `${undated.length} ${undated.length === 1 ? "entry is" : "entries are"} missing dates.`,
+            }
+      );
+    }
 
     result.push(
       data.education.length > 0
