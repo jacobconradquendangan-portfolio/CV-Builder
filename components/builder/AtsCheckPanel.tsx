@@ -15,10 +15,6 @@ interface Check {
   note: string;
 }
 
-function longestLine(_text: string): number {
-  return 0;
-}
-
 const KEYWORD_STOP_WORDS = new Set([
   "about",
   "after",

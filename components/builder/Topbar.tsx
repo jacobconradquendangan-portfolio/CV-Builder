@@ -82,6 +82,18 @@ export function Topbar() {
           <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73]">
             v1.1.0
           </span>
+          <a
+            href="https://portfolio-website-v2-gray.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73] transition-colors hover:bg-black/10 hover:text-[#1d1d1f]"
+          >
+            Visit my portfolio
+            <svg viewBox="0 0 24 24" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M7 17 17 7" />
+              <path d="M7 7h10v10" />
+            </svg>
+          </a>
         </div>
 
         <div className="flex w-full items-center justify-between gap-2 sm:mx-auto sm:w-auto sm:justify-center sm:gap-5">
