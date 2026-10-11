@@ -53,10 +53,28 @@ export function PersonalEditor() {
           placeholder="Berlin, Germany"
         />
         <TextField
-          label="Website / LinkedIn"
+          label="Portfolio display name"
+          value={personal.websiteLabel ?? ""}
+          onChange={(value) => setPersonal({ websiteLabel: value })}
+          placeholder="Portfolio"
+        />
+        <TextField
+          label="Portfolio URL"
           value={personal.website}
           onChange={(value) => setPersonal({ website: value })}
           placeholder="averystone.design"
+        />
+        <TextField
+          label="LinkedIn display name"
+          value={personal.linkedinLabel ?? ""}
+          onChange={(value) => setPersonal({ linkedinLabel: value })}
+          placeholder="LinkedIn"
+        />
+        <TextField
+          label="LinkedIn URL"
+          value={personal.linkedin ?? ""}
+          onChange={(value) => setPersonal({ linkedin: value })}
+          placeholder="linkedin.com/in/your-name"
         />
       </div>
       <TextArea
@@ -238,7 +256,13 @@ export function ProjectsEditor() {
               placeholder="Open Source Design System"
             />
             <TextField
-              label="Link"
+              label="Link display name"
+              value={item.linkLabel ?? ""}
+              onChange={(value) => updateItem("projects", item.id, { linkLabel: value })}
+              placeholder="View project"
+            />
+            <TextField
+              label="Link URL"
               value={item.link}
               onChange={(value) => updateItem("projects", item.id, { link: value })}
               placeholder="github.com/you/project"

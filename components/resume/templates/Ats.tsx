@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { TemplateProps } from "@/lib/types";
 import { accentFg } from "@/lib/utils";
-import { BulletList, DateRange, Photo } from "../primitives";
+import { BulletList, ContactLinks, DateRange, Photo, ResumeLink } from "../primitives";
 
 /**
  * ATS-Friendly template.
@@ -19,9 +19,17 @@ export default function Ats({ data, accent }: TemplateProps) {
   const { personal, experience, education, projects, skills, languages, certifications, characterReferences, awards } = data;
   const ink = accentFg(accent);
 
-  const contactParts = [personal.email, personal.phone, personal.location, personal.website].filter(
-    Boolean
-  );
+  const contactParts = [
+    { label: personal.email },
+    { label: personal.phone },
+    { label: personal.location },
+    ...(personal.website
+      ? [{ label: personal.websiteLabel?.trim() || "Portfolio", url: personal.website }]
+      : []),
+    ...(personal.linkedin
+      ? [{ label: personal.linkedinLabel?.trim() || "LinkedIn", url: personal.linkedin }]
+      : []),
+  ].filter((part) => part.label);
 
   return (
     <div
@@ -37,7 +45,9 @@ export default function Ats({ data, accent }: TemplateProps) {
           <p className="mt-1 text-[13px] font-medium text-slate-700">{personal.jobTitle}</p>
         )}
         {contactParts.length > 0 && (
-          <p className="mt-2 text-[11.5px] text-slate-600">{contactParts.join("   |   ")}</p>
+          <p className="mt-2 text-[11.5px] text-slate-600">
+            <ContactLinks parts={contactParts} separator="   |   " />
+          </p>
         )}
       </header>
 
@@ -104,7 +114,11 @@ export default function Ats({ data, accent }: TemplateProps) {
               <div className="flex items-baseline justify-between gap-4">
                 <h3 className="text-[12.5px] font-bold text-slate-900">{project.name}</h3>
                 {project.link && (
-                  <span className="shrink-0 text-[11px] font-medium text-slate-600">{project.link}</span>
+                  <ResumeLink
+                    url={project.link}
+                    label={project.linkLabel?.trim() || "View project"}
+                    className="shrink-0 text-[11px] font-medium text-slate-600 underline decoration-current/30 underline-offset-2"
+                  />
                 )}
               </div>
               <BulletList

@@ -19,6 +19,9 @@ function emptyResume(): ResumeData {
       phone: "",
       location: "",
       website: "",
+      websiteLabel: "",
+      linkedin: "",
+      linkedinLabel: "",
       photo: "",
       summary: "",
     },
@@ -56,7 +59,7 @@ function blankItem<K extends ListKey>(key: K): ResumeData[K][number] {
         description: "",
       } as ResumeData[K][number];
     case "projects":
-      return { id: uid(), name: "", link: "", description: "" } as ResumeData[K][number];
+      return { id: uid(), name: "", link: "", linkLabel: "", description: "" } as ResumeData[K][number];
     case "skills":
       return { id: uid(), name: "" } as ResumeData[K][number];
     case "languages":
@@ -165,7 +168,7 @@ export const useResumeStore = create<ResumeState>()(
     }),
     {
       name: "cv-builder",
-      version: 4,
+      version: 5,
       migrate: (persistedState) => {
         const state = (persistedState ?? {}) as Partial<ResumeState>;
         const data = (state.data ?? {}) as Partial<ResumeData>;
@@ -179,6 +182,9 @@ export const useResumeStore = create<ResumeState>()(
               ...emptyResume().personal,
               ...personal,
               photo: personal.photo ?? "",
+              websiteLabel: personal.websiteLabel ?? "",
+              linkedin: personal.linkedin ?? "",
+              linkedinLabel: personal.linkedinLabel ?? "",
             },
             experience: data.experience ?? [],
             education: data.education ?? [],

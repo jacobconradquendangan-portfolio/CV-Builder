@@ -3,6 +3,7 @@ import {
   BorderStyle,
   convertInchesToTwip,
   Document,
+  ExternalHyperlink,
   HeadingLevel,
   LevelFormat,
   Packer,
@@ -12,7 +13,7 @@ import {
   TextRun,
 } from "docx";
 import type { ResumeData } from "./types";
-import { prettyDate } from "./utils";
+import { normalizeExternalUrl, prettyDate } from "./utils";
 
 const FONT = "Calibri";
 
@@ -50,15 +51,49 @@ export async function exportResumeToDocx(data: ResumeData): Promise<void> {
   }
 
   // ---- Contact line ----
-  const contactParts = [personal.email, personal.phone, personal.location, personal.website].filter(
-    (part) => part.trim()
-  );
+  const contactParts: Array<{ text: string; url?: string }> = [
+    { text: personal.email },
+    { text: personal.phone },
+    { text: personal.location },
+    ...(personal.website
+      ? [{ text: personal.websiteLabel?.trim() || "Portfolio", url: personal.website }]
+      : []),
+    ...(personal.linkedin
+      ? [{ text: personal.linkedinLabel?.trim() || "LinkedIn", url: personal.linkedin }]
+      : []),
+  ].filter((part) => part.text.trim());
   if (contactParts.length > 0) {
     children.push(
       new Paragraph({
         alignment: AlignmentType.CENTER,
         spacing: { after: 200 },
-        children: [new TextRun({ text: contactParts.join("  |  "), size: 18, color: "64748b", font: FONT })],
+        children: contactParts.flatMap((part, index) => {
+          const text = new TextRun({
+            text: `${index > 0 ? "  |  " : ""}${part.text}`,
+            size: 18,
+            color: part.url ? "2563eb" : "64748b",
+            font: FONT,
+          });
+          const href = part.url ? normalizeExternalUrl(part.url) : null;
+          if (!href) return [text];
+          return [
+            ...(index > 0
+              ? [new TextRun({ text: "  |  ", size: 18, color: "64748b", font: FONT })]
+              : []),
+            new ExternalHyperlink({
+              link: href,
+              children: [
+                new TextRun({
+                  text: part.text,
+                  size: 18,
+                  color: "2563eb",
+                  underline: {},
+                  font: FONT,
+                }),
+              ],
+            }),
+          ];
+        }),
       })
     );
   }
@@ -133,6 +168,8 @@ export async function exportResumeToDocx(data: ResumeData): Promise<void> {
   if (data.projects.length > 0) {
     children.push(sectionHeading("PROJECTS"));
     for (const project of data.projects) {
+      const projectHref = normalizeExternalUrl(project.link);
+      const linkLabel = project.linkLabel?.trim() || "View project";
       children.push(
         new Paragraph({
           spacing: { before: 120, after: 40 },
@@ -142,7 +179,22 @@ export async function exportResumeToDocx(data: ResumeData): Promise<void> {
             ...(project.link.trim()
               ? [
                   new TextRun({ text: "\t", font: FONT }),
-                  new TextRun({ text: project.link, size: 18, color: "2563eb", font: FONT }),
+                  ...(projectHref
+                    ? [
+                        new ExternalHyperlink({
+                          link: projectHref,
+                          children: [
+                            new TextRun({
+                              text: linkLabel,
+                              size: 18,
+                              color: "2563eb",
+                              underline: {},
+                              font: FONT,
+                            }),
+                          ],
+                        }),
+                      ]
+                    : [new TextRun({ text: linkLabel, size: 18, color: "2563eb", font: FONT })]),
                 ]
               : []),
           ],

@@ -5,6 +5,9 @@ export interface Personal {
   phone: string;
   location: string;
   website: string;
+  websiteLabel?: string;
+  linkedin?: string;
+  linkedinLabel?: string;
   photo: string;
   summary: string;
 }
@@ -33,6 +36,7 @@ export interface Project {
   id: string;
   name: string;
   link: string;
+  linkLabel?: string;
   description: string;
 }
 

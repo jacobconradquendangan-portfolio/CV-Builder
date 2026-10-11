@@ -2,6 +2,18 @@ export function cn(...classes: Array<string | false | null | undefined>): string
   return classes.filter(Boolean).join(" ");
 }
 
+export function normalizeExternalUrl(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  try {
+    const url = new URL(/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(trimmed) ? trimmed : `https://${trimmed}`);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
 /** A4 height in CSS pixels at 96dpi (794 x 1123). Single source of truth for page math. */
 export const A4_PAGE_HEIGHT = 1123;
 /** Vertical padding on the resume root (py-12 => 48px top + 48px bottom). */

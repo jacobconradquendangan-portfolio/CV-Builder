@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { TemplateProps } from "@/lib/types";
 import { accentFg } from "@/lib/utils";
-import { BulletList, DateRange, Photo } from "../primitives";
+import { BulletList, DateRange, Photo, ResumeLink } from "../primitives";
 
 export default function Sidebar({ data, accent }: TemplateProps) {
   const { personal, experience, education, projects, skills, languages, certifications, characterReferences, awards } = data;
@@ -31,7 +31,20 @@ export default function Sidebar({ data, accent }: TemplateProps) {
             <ContactItem label="Email" value={personal.email} />
             <ContactItem label="Phone" value={personal.phone} />
             <ContactItem label="Location" value={personal.location} />
-            <ContactItem label="Website" value={personal.website} />
+            {personal.website && (
+              <ContactItem
+                label="Portfolio"
+                value={personal.websiteLabel?.trim() || "Portfolio"}
+                url={personal.website}
+              />
+            )}
+            {personal.linkedin && (
+              <ContactItem
+                label="LinkedIn"
+                value={personal.linkedinLabel?.trim() || "LinkedIn"}
+                url={personal.linkedin}
+              />
+            )}
           </SideSection>
 
           {skills.some((skill) => skill.name.trim()) && (
@@ -132,7 +145,13 @@ export default function Sidebar({ data, accent }: TemplateProps) {
                 <div key={project.id} className={index < projects.length - 1 ? "avoid-break mb-4" : "avoid-break"}>
                   <div className="flex items-baseline justify-between gap-4">
                     <h3 className="text-[12.5px] font-bold text-slate-900">{project.name}</h3>
-                    {project.link && <span className="shrink-0 text-[10.5px] text-slate-400">{project.link}</span>}
+                    {project.link && (
+                      <ResumeLink
+                        url={project.link}
+                        label={project.linkLabel?.trim() || "View project"}
+                        className="shrink-0 text-[10.5px] text-slate-400 underline decoration-current/30 underline-offset-2"
+                      />
+                    )}
                   </div>
                   <BulletList text={project.description} dotClassName="bg-[var(--accent-fg)] opacity-70" textClassName="text-[12px] text-slate-600" />
                 </div>
@@ -184,12 +203,14 @@ function SideSection({ title, children }: { title: string; children: ReactNode }
   );
 }
 
-function ContactItem({ label, value }: { label: string; value: string }) {
+function ContactItem({ label, value, url }: { label: string; value: string; url?: string }) {
   if (!value.trim()) return null;
   return (
     <p className="mb-2">
       <span className="block text-[9px] font-semibold uppercase tracking-wide text-slate-400">{label}</span>
-      <span className="text-[11.5px] text-slate-700">{value}</span>
+      <span className="text-[11.5px] text-slate-700">
+        {url ? <ResumeLink url={url} label={value} /> : value}
+      </span>
     </p>
   );
 }

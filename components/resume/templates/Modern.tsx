@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { TemplateProps } from "@/lib/types";
 import { cn, isLightColor, accentFg } from "@/lib/utils";
-import { BulletList, DateRange, Photo } from "../primitives";
+import { BulletList, DateRange, Photo, ResumeLink } from "../primitives";
 
 export default function Modern({ data, accent }: TemplateProps) {
   const { personal, experience, education, projects, skills, languages, certifications, characterReferences, awards } = data;
@@ -42,7 +42,22 @@ export default function Modern({ data, accent }: TemplateProps) {
           <ContactLine light={lightAccent} label="Email" value={personal.email} />
           <ContactLine light={lightAccent} label="Phone" value={personal.phone} />
           <ContactLine light={lightAccent} label="Location" value={personal.location} />
-          <ContactLine light={lightAccent} label="Website" value={personal.website} />
+          {personal.website && (
+            <ContactLine
+              light={lightAccent}
+              label="Portfolio"
+              value={personal.websiteLabel?.trim() || "Portfolio"}
+              url={personal.website}
+            />
+          )}
+          {personal.linkedin && (
+            <ContactLine
+              light={lightAccent}
+              label="LinkedIn"
+              value={personal.linkedinLabel?.trim() || "LinkedIn"}
+              url={personal.linkedin}
+            />
+          )}
         </SidebarSection>
 
         {skills.some((skill) => skill.name.trim()) && (
@@ -161,7 +176,11 @@ export default function Modern({ data, accent }: TemplateProps) {
                 <div className="flex items-baseline justify-between gap-4">
                   <h3 className="text-[13px] font-bold text-slate-900">{project.name}</h3>
                   {project.link && (
-                    <span className="shrink-0 text-[10px] font-medium text-slate-500">{project.link}</span>
+                    <ResumeLink
+                      url={project.link}
+                      label={project.linkLabel?.trim() || "View project"}
+                      className="shrink-0 text-[10px] font-medium text-slate-500 underline decoration-current/30 underline-offset-2"
+                    />
                   )}
                 </div>
                 <BulletList
@@ -235,16 +254,18 @@ function ContactLine({
   label,
   value,
   light,
+  url,
 }: {
   label: string;
   value: string;
   light: boolean;
+  url?: string;
 }) {
   if (!value.trim()) return null;
   return (
     <p className="mb-1.5 text-[11px] leading-snug">
       <span className={cn("font-medium", light ? "text-slate-600" : "text-white/70")}>{label}: </span>
-      {value}
+      {url ? <ResumeLink url={url} label={value} /> : value}
     </p>
   );
 }

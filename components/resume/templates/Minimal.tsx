@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { TemplateProps } from "@/lib/types";
 import { accentFg } from "@/lib/utils";
-import { BulletList, DateRange, Photo } from "../primitives";
+import { BulletList, DateRange, Photo, ResumeLink } from "../primitives";
 
 export default function Minimal({ data, accent }: TemplateProps) {
   const { personal, experience, education, projects, skills, languages, certifications, characterReferences, awards } = data;
@@ -28,7 +28,24 @@ export default function Minimal({ data, accent }: TemplateProps) {
           {personal.email && <p>{personal.email}</p>}
           {personal.phone && <p>{personal.phone}</p>}
           {personal.location && <p>{personal.location}</p>}
-          {personal.website && <p>{personal.website}</p>}
+          {personal.website && (
+            <p>
+              <ResumeLink
+                url={personal.website}
+                label={personal.websiteLabel?.trim() || "Portfolio"}
+                className="underline decoration-current/30 underline-offset-2"
+              />
+            </p>
+          )}
+          {personal.linkedin && (
+            <p>
+              <ResumeLink
+                url={personal.linkedin}
+                label={personal.linkedinLabel?.trim() || "LinkedIn"}
+                className="underline decoration-current/30 underline-offset-2"
+              />
+            </p>
+          )}
         </div>
       </div>
 
@@ -80,7 +97,13 @@ export default function Minimal({ data, accent }: TemplateProps) {
             <div key={project.id} className="avoid-break mb-4">
               <div className="flex items-baseline justify-between gap-4">
                 <span className="text-[12.5px] font-semibold text-slate-900">{project.name}</span>
-                {project.link && <span className="shrink-0 text-[10.5px] text-slate-400">{project.link}</span>}
+                {project.link && (
+                  <ResumeLink
+                    url={project.link}
+                    label={project.linkLabel?.trim() || "View project"}
+                    className="shrink-0 text-[10.5px] text-slate-400 underline decoration-current/30 underline-offset-2"
+                  />
+                )}
               </div>
               <BulletList text={project.description} dotClassName="bg-[var(--accent-fg)] opacity-70" textClassName="text-[11.5px] text-slate-600" />
             </div>

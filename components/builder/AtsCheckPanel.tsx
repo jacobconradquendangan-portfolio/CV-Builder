@@ -182,7 +182,12 @@ function collectResumeText(data: ResumeData): string {
     data.personal.email,
     data.personal.phone,
     data.personal.location,
-    data.personal.website,
+    data.personal.website
+      ? data.personal.websiteLabel?.trim() || "Portfolio"
+      : "",
+    data.personal.linkedin
+      ? data.personal.linkedinLabel?.trim() || "LinkedIn"
+      : "",
     data.personal.summary,
   ];
 
@@ -197,7 +202,11 @@ function collectResumeText(data: ResumeData): string {
     parts.push(item.degree, item.school, item.location, item.description, startLabel, endLabel);
   }
   for (const project of data.projects) {
-    parts.push(project.name, project.link, project.description);
+    parts.push(
+      project.name,
+      project.link ? project.linkLabel?.trim() || "View project" : "",
+      project.description
+    );
   }
   for (const skill of data.skills) {
     parts.push(skill.name);

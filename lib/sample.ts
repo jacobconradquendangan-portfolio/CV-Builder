@@ -10,6 +10,7 @@ export const sampleData: ResumeData = {
     phone: "+63 917 555 0123",
     location: "Makati City, Metro Manila",
     website: "andrea-reyes.design",
+    websiteLabel: "Portfolio",
     photo: "",
     summary:
       "Product designer with 8+ years of experience crafting intuitive digital products for fintech and e-commerce in the Philippine market. I bridge research, strategy and execution to ship experiences that users love and businesses rely on.",
@@ -71,6 +72,7 @@ export const sampleData: ResumeData = {
       id: "prj-1",
       name: "GCash App Redesign",
       link: "gcash.com",
+      linkLabel: "Case study",
       description:
         "Redesigned the bill payments flow for 81M+ users.\nImproved transaction completion rate by 28% and reduced support tickets by 15%.",
     },
@@ -78,6 +80,7 @@ export const sampleData: ResumeData = {
       id: "prj-2",
       name: "Barangay e-Serbasyon",
       link: "github.com/andrea/barangay",
+      linkLabel: "GitHub repository",
       description:
         "A digital services platform for barangay clearance and permit applications.\nServed 50K+ residents across 12 barangays in Metro Manila.",
     },
