@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { createPortal } from "react-dom";
 import { useResumeStore } from "@/store/useResumeStore";
 import { cn } from "@/lib/utils";
 import { exportResumeToDocx } from "@/lib/exportDocx";
+import { readResumePdf, type ResumePdfImport } from "@/lib/importResumePdf";
 import type { TemplateId } from "@/lib/types";
+import { PdfImportDialog } from "./PdfImportDialog";
 
 const TEMPLATE_OPTIONS: { id: TemplateId; label: string }[] = [
   { id: "modern", label: "Modern" },
@@ -38,6 +41,7 @@ export function Topbar() {
   const loadSample = useResumeStore((state) => state.loadSample);
   const clear = useResumeStore((state) => state.clear);
   const data = useResumeStore((state) => state.data);
+  const setData = useResumeStore((state) => state.setData);
 
   const normalizedAccent = accent.toLowerCase();
   const selectedColor = ACCENTS.find((color) => color.value.toLowerCase() === normalizedAccent);
@@ -56,7 +60,41 @@ export function Topbar() {
   };
 
   const [downloadOpen, setDownloadOpen] = useState(false);
+  const [pendingPdfImport, setPendingPdfImport] = useState<ResumePdfImport | null>(null);
+  const [isReadingPdf, setIsReadingPdf] = useState(false);
+  const [pdfImportError, setPdfImportError] = useState("");
   const downloadRef = useRef<HTMLDivElement>(null);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePdfSelection = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    setIsReadingPdf(true);
+    setPdfImportError("");
+    try {
+      setPendingPdfImport(await readResumePdf(file));
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "Unknown PDF reading error.";
+      setPdfImportError(`Could not read this PDF. ${detail}`);
+    } finally {
+      setIsReadingPdf(false);
+      input.value = "";
+    }
+  };
+
+  const confirmPdfImport = () => {
+    if (!pendingPdfImport) return;
+    setData({
+      ...pendingPdfImport.data,
+      personal: {
+        ...pendingPdfImport.data.personal,
+        photo: data.personal.photo,
+      },
+    });
+    setPendingPdfImport(null);
+  };
 
   useEffect(() => {
     if (!downloadOpen) return;
@@ -196,6 +234,30 @@ export function Topbar() {
       </div>
 
       <div className="flex w-full flex-wrap items-center justify-end gap-2 border-t border-black/[0.06] pt-2 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+        <input
+          ref={pdfInputRef}
+          type="file"
+          accept="application/pdf,.pdf"
+          onChange={handlePdfSelection}
+          className="sr-only"
+          tabIndex={-1}
+          aria-label="Choose a resume PDF to import"
+        />
+        <button
+          type="button"
+          onClick={() => pdfInputRef.current?.click()}
+          disabled={isReadingPdf}
+          className={cn(secondaryButton, "disabled:cursor-wait disabled:opacity-60")}
+        >
+          {isReadingPdf ? "Reading PDF…" : (
+            <>
+              Import PDF
+              <span className="rounded-full bg-[#0071e3]/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#0071e3]">
+                Beta
+              </span>
+            </>
+          )}
+        </button>
         <button type="button" onClick={loadSample} className={secondaryButton}>
           Load sample
         </button>
@@ -272,6 +334,32 @@ export function Topbar() {
           )}
         </div>
       </div>
+      {pendingPdfImport && (
+        createPortal(
+          <PdfImportDialog
+            result={pendingPdfImport}
+            onCancel={() => setPendingPdfImport(null)}
+            onConfirm={confirmPdfImport}
+          />,
+          document.body
+        )
+      )}
+      {pdfImportError && (
+        <div
+          role="alert"
+          className="animate-rise fixed bottom-5 left-1/2 z-[70] flex w-[min(92vw,520px)] -translate-x-1/2 items-start justify-between gap-4 rounded-2xl border border-red-200 bg-white px-4 py-3 text-[13px] leading-relaxed text-red-700 shadow-[0_12px_40px_rgba(0,0,0,0.18)]"
+        >
+          <span>{pdfImportError}</span>
+          <button
+            type="button"
+            onClick={() => setPdfImportError("")}
+            aria-label="Dismiss PDF import error"
+            className="shrink-0 rounded-full px-2 font-semibold text-red-500 hover:bg-red-50"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </header>
   );
 }

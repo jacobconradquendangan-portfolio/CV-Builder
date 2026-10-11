@@ -10,13 +10,14 @@ const FEATURES = [
   "10 accent colors plus a custom color picker (desktop toolbar)",
   "Optional photo upload (stored on your device only)",
   "Export as PDF (text-selectable) or DOCX (editable)",
+  "NEW · PDF import (Beta) — extract resume details and links from a text-based PDF, review them, then choose whether to replace your CV",
   "Live ATS self-check panel on the right",
   "Optional job-description keyword coverage check — processed on this device",
   "Your resume details and images stay in this browser — nothing is sent to or collected by this app",
 ];
 
 const STEPS = [
-  "Fill in your details — use the tabs on the left to add experience, education, skills, projects and more.",
+  "Try Import PDF (Beta) in the toolbar to extract details and links from a text-based resume. Review the results before choosing whether to replace your CV. Scanned PDFs are not supported yet.",
   "Style your resume — pick one of 5 templates and 10 accent colors (or any custom color via the rainbow picker on desktop); the preview updates live. Use the ATS panel for parser warnings and optional job-keyword coverage.",
   "Download — click Download and choose PDF (text-selectable, print-ready) or DOCX (editable in Word / Google Docs).",
 ];

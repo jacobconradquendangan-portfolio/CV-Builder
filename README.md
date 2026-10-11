@@ -12,6 +12,7 @@ A fast, privacy-first resume and CV builder built with **Next.js**, **TypeScript
 - **Custom link labels** — use a short display name for your website, LinkedIn, and project links instead of showing full URLs
 - **PDF export** — vector, text-selectable output via the browser print dialog
 - **DOCX export** — editable file compatible with Word, Google Docs, LibreOffice, and Pages
+- **PDF import (Beta)** — extract text, links, and common resume sections on-device; review the preview before choosing whether to replace your current CV (scanned PDFs are not supported yet)
 - **Full data model** — personal info, summary, experience, education, projects, skills, languages, certifications, awards, and character references
 - **Auto-save** — all data persists to `localStorage`
 - **Privacy-first** — your resume and photos never leave the browser
@@ -33,6 +34,12 @@ Other scripts:
 | `npm run build`   | Production build             |
 | `npm run start`   | Run the production build     |
 | `npm run lint`    | Run ESLint                   |
+
+## Importing a resume PDF (Beta)
+
+Choose **Import PDF** in the builder toolbar and select a text-based PDF. The importer extracts selectable text, links, and common resume sections locally in your browser. Review the detected information before choosing **Replace current CV**; canceling leaves your current resume unchanged. Your profile photo is kept when you replace the resume.
+
+Scanned or image-only PDFs are not supported yet. Extraction is in beta, so check the preview and edit any details that were missed or grouped incorrectly before replacing your CV.
 
 ## Exporting
 
