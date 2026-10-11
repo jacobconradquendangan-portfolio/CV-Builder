@@ -233,7 +233,7 @@ export function Topbar() {
         </div>
       </div>
 
-      <div className="flex w-full flex-wrap items-center justify-end gap-2 border-t border-black/[0.06] pt-2 lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+      <div className="grid w-full grid-cols-2 gap-2 border-t border-black/[0.06] pt-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
         <input
           ref={pdfInputRef}
           type="file"
@@ -247,7 +247,7 @@ export function Topbar() {
           type="button"
           onClick={() => pdfInputRef.current?.click()}
           disabled={isReadingPdf}
-          className={cn(secondaryButton, "disabled:cursor-wait disabled:opacity-60")}
+          className={cn(secondaryButton, "w-full disabled:cursor-wait disabled:opacity-60 sm:w-auto")}
         >
           {isReadingPdf ? "Reading PDF…" : (
             <>
@@ -258,23 +258,23 @@ export function Topbar() {
             </>
           )}
         </button>
-        <button type="button" onClick={loadSample} className={secondaryButton}>
+        <button type="button" onClick={loadSample} className={cn(secondaryButton, "w-full sm:w-auto")}>
           Load sample
         </button>
         <button
           type="button"
           onClick={clear}
-          className={cn(secondaryButton, "hover:border-red-300 hover:bg-red-50 hover:text-red-600")}
+          className={cn(secondaryButton, "w-full hover:border-red-300 hover:bg-red-50 hover:text-red-600 sm:w-auto")}
         >
           Clear
         </button>
-        <div ref={downloadRef} className="relative ml-auto">
+        <div ref={downloadRef} className="relative w-full sm:ml-auto sm:w-auto">
           <button
             type="button"
             onClick={() => setDownloadOpen((open) => !open)}
             aria-haspopup="menu"
             aria-expanded={downloadOpen}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#0071e3] px-4 py-2 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(0,113,227,0.35)] transition-all duration-200 hover:bg-[#0077ed] hover:shadow-[0_4px_12px_rgba(0,113,227,0.4)] active:scale-[0.97]"
+            className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#0071e3] px-4 py-2 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(0,113,227,0.35)] transition-all duration-200 hover:bg-[#0077ed] hover:shadow-[0_4px_12px_rgba(0,113,227,0.4)] active:scale-[0.97] sm:w-auto"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 3v12" />
