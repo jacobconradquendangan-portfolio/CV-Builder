@@ -7,14 +7,38 @@ const PREVIEW_SECTIONS = [
   {
     label: "Experience",
     items: (result: ResumePdfImport) =>
-      result.data.experience.map((item) => [item.role, item.company].filter(Boolean).join(" · ")),
+      result.data.experience.map((item) =>
+        [
+          item.role,
+          [item.startDate, item.endDate].filter(Boolean).join(" – "),
+          [item.company, item.location].filter(Boolean).join(", "),
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      ),
   },
   {
     label: "Education",
     items: (result: ResumePdfImport) =>
-      result.data.education.map((item) => [item.degree, item.school].filter(Boolean).join(" · ")),
+      result.data.education.map((item) =>
+        [
+          item.degree,
+          [item.startDate, item.endDate].filter(Boolean).join(" – "),
+          [item.school, item.location].filter(Boolean).join(", "),
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      ),
   },
-  { label: "Projects", items: (result: ResumePdfImport) => result.data.projects.map((item) => item.name) },
+  {
+    label: "Projects",
+    items: (result: ResumePdfImport) =>
+      result.data.projects.map((item) =>
+        [item.name, item.description.split("\n").filter(Boolean).join(" ● ")]
+          .filter(Boolean)
+          .join(" · ")
+      ),
+  },
   { label: "Skills", items: (result: ResumePdfImport) => result.data.skills.map((item) => item.name) },
   {
     label: "Languages",
@@ -23,9 +47,18 @@ const PREVIEW_SECTIONS = [
   },
   {
     label: "Certifications",
-    items: (result: ResumePdfImport) => result.data.certifications.map((item) => item.name),
+    items: (result: ResumePdfImport) =>
+      result.data.certifications.map((item) =>
+        [item.name, item.issuer, item.year].filter(Boolean).join(" · ")
+      ),
   },
-  { label: "Awards", items: (result: ResumePdfImport) => result.data.awards.map((item) => item.name) },
+  {
+    label: "Awards",
+    items: (result: ResumePdfImport) =>
+      result.data.awards.map((item) =>
+        [item.name, item.issuer, item.year].filter(Boolean).join(" · ")
+      ),
+  },
 ] as const;
 
 export function PdfImportDialog({
@@ -101,7 +134,12 @@ export function PdfImportDialog({
                 "No contact details detected"}
             </p>
             <p className="mt-1 break-words text-[12px] leading-relaxed text-[#0071e3]">
-              {[personal.website, personal.linkedin].filter(Boolean).join(" · ") ||
+              {[
+                personal.website && `${personal.websiteLabel?.trim() || "Portfolio"}: ${personal.website}`,
+                personal.linkedin && `${personal.linkedinLabel?.trim() || "LinkedIn"}: ${personal.linkedin}`,
+              ]
+                .filter(Boolean)
+                .join(" · ") ||
                 "No portfolio or LinkedIn links detected"}
             </p>
             {personal.summary && (

@@ -24,6 +24,7 @@ type PdfTextLine = {
   text: string;
   x: number;
   y: number;
+  width: number;
   links: Array<{ url: string; label: string }>;
 };
 
@@ -165,10 +166,13 @@ function groupTextLines(chunks: TextChunk[]): PdfTextLine[] {
         previousEnd = chunk.x + chunk.width;
       }
 
+      const x = ordered[0]?.x ?? 0;
+      const right = Math.max(...ordered.map((chunk) => chunk.x + chunk.width));
       return {
         text: text.replace(/[ \t]+/g, " ").trim(),
-        x: ordered[0]?.x ?? 0,
+        x,
         y,
+        width: right - x,
         links: [],
       };
     })
@@ -269,12 +273,12 @@ function parsePersonal(header: PdfTextLine[], summary: PdfTextLine[]): Personal 
   for (const link of profileLinks) {
     if (/linkedin\./i.test(link.url)) {
       personal.linkedin = link.url;
-      personal.linkedinLabel = "LinkedIn";
+      personal.linkedinLabel = cleanLinkLabel(link.label, "LinkedIn");
       continue;
     }
     if (!personal.website) {
       personal.website = link.url;
-      personal.websiteLabel = "Portfolio";
+      personal.websiteLabel = cleanLinkLabel(link.label, "Portfolio");
     }
   }
 
@@ -374,9 +378,7 @@ function parseExperience(lines: PdfTextLine[]): Experience[] {
     }
 
     if (!current.company) {
-      const [company, location = ""] = line.text.split(/\s*,\s*/, 2);
-      current.company = company.trim();
-      current.location = location.trim();
+      [current.company, current.location] = splitNameAndLocation(line.text);
     } else {
       current.description = appendLine(current.description, line.text);
     }
@@ -414,9 +416,7 @@ function parseEducation(lines: PdfTextLine[]): Education[] {
     }
 
     if (!current.school) {
-      const [school, location = ""] = line.text.split(/\s*,\s*/, 2);
-      current.school = school.trim();
-      current.location = location.trim();
+      [current.school, current.location] = splitNameAndLocation(line.text);
     } else {
       current.description = appendLine(current.description, line.text);
     }
@@ -429,6 +429,16 @@ function parseProjects(lines: PdfTextLine[]): Project[] {
   const projects: Project[] = [];
   let current: Project | null = null;
   const minX = Math.min(...lines.map((line) => line.x));
+  const maxLineWidth = Math.max(...lines.map((line) => line.width));
+  const typicalLineGap = median(
+    lines.slice(1).flatMap((line, index) => {
+      const previous = lines[index];
+      const gap = previous.y - line.y;
+      return Math.abs(previous.x - line.x) <= 2 && gap > 0 && gap < 40 ? [gap] : [];
+    })
+  );
+  let previousLine: PdfTextLine | null = null;
+
   const save = () => {
     if (current && (current.name || current.link || current.description)) projects.push(current);
   };
@@ -461,7 +471,19 @@ function parseProjects(lines: PdfTextLine[]): Project[] {
       current.link = anchor.url;
       current.linkLabel = preferredLinkLabel(anchor.label);
     }
-    if (current) current.description = appendLine(current.description, line.text);
+    if (current) {
+      const isWrappedContinuation =
+        previousLine !== null &&
+        current.description.length > 0 &&
+        Math.abs(previousLine.x - line.x) <= 2 &&
+        previousLine.width >= maxLineWidth * 0.82 &&
+        !/[.!?;:,]\s*["')\]]?$/.test(previousLine.text) &&
+        previousLine.y - line.y < typicalLineGap * 0.94;
+      current.description = isWrappedContinuation
+        ? appendContinuationLine(current.description, line.text)
+        : appendLine(current.description, line.text);
+    }
+    previousLine = line;
   }
   save();
   return projects;
@@ -496,8 +518,9 @@ function parseCertifications(lines: PdfTextLine[]): Certification[] {
 
   for (const line of lines) {
     if (/^(issued|expires)\b/i.test(line.text)) {
-      const year = line.text.match(/\b(?:19|20)\d{2}\b/)?.[0] ?? "";
-      if (current && !current.year) current.year = year;
+      if (current) {
+        current.year = current.year ? `${current.year} · ${line.text}` : line.text;
+      }
       continue;
     }
 
@@ -534,11 +557,7 @@ function parseAwards(lines: PdfTextLine[]): Award[] {
 
     const dateMatch = text.match(dateOnlyPattern);
     if (dateMatch) {
-      if (current) {
-        current.year = dateMatch[2]
-          ? text.replace(/\s+/g, " ").trim()
-          : dateMatch[1].match(/\b(?:19|20)\d{2}\b/)?.[0] ?? current.year;
-      }
+      if (current) current.year = text.replace(/\s+/g, " ").trim();
       continue;
     }
 
@@ -591,6 +610,17 @@ function removeDateRange(text: string): { title: string; startDate: string; endD
   };
 }
 
+function splitNameAndLocation(value: string): [string, string] {
+  const separator = value.indexOf(",");
+  if (separator < 0) return [value.trim(), ""];
+  return [value.slice(0, separator).trim(), value.slice(separator + 1).trim()];
+}
+
+function cleanLinkLabel(value: string, fallback: string): string {
+  const label = value.replace(/[·|•\s]+$/g, "").trim();
+  return label && !/^https?:\/\//i.test(label) ? label : fallback;
+}
+
 function normalizeName(value: string): string {
   const compact = value.trim().replace(/\s+/g, " ");
   const name = isSpacedUppercase(compact) ? compact.replace(/\s/g, "") : compact;
@@ -629,6 +659,20 @@ function cleanEntryTitle(value: string): string {
 
 function appendLine(existing: string, next: string): string {
   return existing ? `${existing}\n${next}` : next;
+}
+
+function appendContinuationLine(existing: string, next: string): string {
+  const text = next.trim();
+  return existing ? `${existing} ${text}` : text;
+}
+
+function median(values: number[]): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((first, second) => first - second);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[middle - 1] + sorted[middle]) / 2
+    : sorted[middle];
 }
 
 function splitList(value: string): string[] {
