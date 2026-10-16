@@ -78,7 +78,7 @@ export function FormPanel({ mobileFullHeight = false }: { mobileFullHeight?: boo
                 className={cn(
                   "flex min-w-0 items-center justify-center gap-1 rounded-[10px] px-1.5 py-2 text-[12px] font-medium transition-all duration-200 active:scale-[0.96]",
                   active
-                    ? "bg-black/[0.07] text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
+                    ? "bg-black/7 text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
                     : "text-[#6e6e73] hover:bg-black/5 hover:text-[#1d1d1f]"
                 )}
               >
