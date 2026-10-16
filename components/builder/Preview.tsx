@@ -13,7 +13,7 @@ const DESIGN_FONTS: Record<DesignTheme["fontFamily"], string> = {
   sans: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif',
   serif: 'Georgia, "Times New Roman", "Nimbus Roman", serif',
   mono: 'ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace',
-  rounded: 'ui-rounded, "SF Pro Rounded", -apple-system, "Segoe UI", sans-serif',
+  rounded: '"Trebuchet MS", "Arial Rounded MT Bold", sans-serif',
 };
 
 /**
