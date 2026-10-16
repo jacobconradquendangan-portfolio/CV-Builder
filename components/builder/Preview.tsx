@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Resume } from "@/components/resume/Resume";
 import { useResumeStore } from "@/store/useResumeStore";
 import type { DesignTheme, TemplateId } from "@/lib/types";
@@ -22,21 +22,15 @@ const DESIGN_FONTS: Record<DesignTheme["fontFamily"], string> = {
  * keep the selected font family consistent across templates.
  */
 function designCss(theme: DesignTheme, templateId: TemplateId, hasPhoto: boolean): string {
-  const baseDelta = theme.baseSize - 12;
   const nameDelta = theme.nameSize - 30;
-  const headingDelta = theme.headingSize - 11;
   const lineDelta = theme.lineHeight - 1.6;
   const photoDelta = hasPhoto ? theme.photoSize - 96 : 0;
   const customPhotoShape = hasPhoto && theme.photoShape !== "circle";
   const supportsHeadlineLines = templateId !== "modern" && templateId !== "sidebar";
   const headingStyle = supportsHeadlineLines ? theme.headingStyle ?? "template" : "template";
   const fontRule = `#resume-inner, #resume-inner > div { font-family: ${DESIGN_FONTS[theme.fontFamily]} !important; }`;
-  const bodyRule = baseDelta
-    ? `#resume-inner p, #resume-inner li, #resume-inner h3 { font-size: calc(1em + ${baseDelta}px) !important; }`
-    : "";
-  const lineRule = lineDelta ? `#resume-inner > div { line-height: ${theme.lineHeight} !important; }` : "";
+  const lineRule = lineDelta ? `#resume-inner, #resume-inner * { line-height: ${theme.lineHeight} !important; }` : "";
   const nameRule = nameDelta ? `#resume-inner h1 { font-size: ${theme.nameSize}px !important; }` : "";
-  const headingRule = headingDelta ? `#resume-inner h2 { font-size: ${theme.headingSize}px !important; }` : "";
   const photoSizeRule =
     photoDelta
       ? `#resume-inner img[alt=""] { width: ${theme.photoSize}px !important; height: ${theme.photoSize}px !important; }`
@@ -64,7 +58,7 @@ function designCss(theme: DesignTheme, templateId: TemplateId, hasPhoto: boolean
       : headingStyle === "underline"
         ? `#resume-inner h2 { border-bottom: 2px solid var(--accent-fg) !important; padding-bottom: 6px !important; }`
         : "";
-  return [fontRule, bodyRule, lineRule, nameRule, headingRule, photoSizeRule, photoShapeRule, bulletRule, stripNativeHeadings, applyHeadingStyle]
+  return [fontRule, lineRule, nameRule, photoSizeRule, photoShapeRule, bulletRule, stripNativeHeadings, applyHeadingStyle]
     .filter(Boolean)
     .join("\n");
 }
@@ -79,7 +73,52 @@ export function Preview() {
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const scaledFontElementsRef = useRef(
+    new Map<HTMLElement, { value: string; priority: string }>()
+  );
   const [scale, setScale] = useState(0.5);
+
+  useLayoutEffect(() => {
+    const inner = innerRef.current;
+    if (!inner) return;
+
+    for (const [element, original] of scaledFontElementsRef.current) {
+      if (original.value) {
+        element.style.setProperty("font-size", original.value, original.priority);
+      } else {
+        element.style.removeProperty("font-size");
+      }
+    }
+    scaledFontElementsRef.current.clear();
+
+    const scaleByElement = new Map<HTMLElement, number>();
+    const addElements = (selector: string, fontScale: number) => {
+      if (fontScale === 1) return;
+      for (const element of inner.querySelectorAll<HTMLElement>(selector)) {
+        scaleByElement.set(element, fontScale);
+      }
+    };
+
+    addElements("p, p *, li, li *, h3, h3 *", design.baseSize / 12);
+    addElements("h2, h2 *", design.headingSize / 11);
+
+    const fontSizes = [...scaleByElement].map(([element, fontScale]) => ({
+      element,
+      fontScale,
+      fontSize: Number.parseFloat(window.getComputedStyle(element).fontSize),
+      originalValue: element.style.getPropertyValue("font-size"),
+      originalPriority: element.style.getPropertyPriority("font-size"),
+    }));
+
+    for (const { element, fontScale, fontSize, originalValue, originalPriority } of fontSizes) {
+      if (!Number.isFinite(fontSize)) continue;
+      scaledFontElementsRef.current.set(element, {
+        value: originalValue,
+        priority: originalPriority,
+      });
+      element.style.setProperty("font-size", `${fontSize * fontScale}px`, "important");
+    }
+  }, [data, design.baseSize, design.headingSize, templateId]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
