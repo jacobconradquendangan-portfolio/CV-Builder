@@ -3,15 +3,77 @@
 import { useEffect, useRef, useState } from "react";
 import { Resume } from "@/components/resume/Resume";
 import { useResumeStore } from "@/store/useResumeStore";
+import type { DesignTheme, TemplateId } from "@/lib/types";
 import { PAGE_PADDING, PRINTED_PAGE_HEIGHT, estimatePageCount } from "@/lib/utils";
 
 export const RESUME_WIDTH = 794;
 export const PAGE_HEIGHT = 1123;
 
+const DESIGN_FONTS: Record<DesignTheme["fontFamily"], string> = {
+  sans: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif',
+  serif: 'Georgia, "Times New Roman", "Nimbus Roman", serif',
+  mono: 'ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace',
+  rounded: 'ui-rounded, "SF Pro Rounded", -apple-system, "Segoe UI", sans-serif',
+};
+
+/**
+ * Scoped override so Design settings apply to every template without
+ * rewriting them. `#resume-inner` ID selectors beat Tailwind utilities and
+ * keep the selected font family consistent across templates.
+ */
+function designCss(theme: DesignTheme, templateId: TemplateId, hasPhoto: boolean): string {
+  const baseDelta = theme.baseSize - 12;
+  const nameDelta = theme.nameSize - 30;
+  const headingDelta = theme.headingSize - 11;
+  const lineDelta = theme.lineHeight - 1.6;
+  const photoDelta = hasPhoto ? theme.photoSize - 96 : 0;
+  const customPhotoShape = hasPhoto && theme.photoShape !== "circle";
+  const supportsHeadlineLines = templateId !== "modern" && templateId !== "sidebar";
+  const headingStyle = supportsHeadlineLines ? theme.headingStyle ?? "template" : "template";
+  const fontRule = `#resume-inner, #resume-inner > div { font-family: ${DESIGN_FONTS[theme.fontFamily]} !important; }`;
+  const bodyRule = baseDelta
+    ? `#resume-inner p, #resume-inner li, #resume-inner h3 { font-size: calc(1em + ${baseDelta}px) !important; }`
+    : "";
+  const lineRule = lineDelta ? `#resume-inner > div { line-height: ${theme.lineHeight} !important; }` : "";
+  const nameRule = nameDelta ? `#resume-inner h1 { font-size: ${theme.nameSize}px !important; }` : "";
+  const headingRule = headingDelta ? `#resume-inner h2 { font-size: ${theme.headingSize}px !important; }` : "";
+  const photoSizeRule =
+    photoDelta
+      ? `#resume-inner img[alt=""] { width: ${theme.photoSize}px !important; height: ${theme.photoSize}px !important; }`
+      : "";
+  const photoShapeRule = customPhotoShape ? `#resume-inner img[alt=""] { border-radius: ${theme.photoShape === "rounded" ? "16px" : "0"} !important; }` : "";
+  // Bullets: BulletList renders <span class="... rounded-full"> dots inside <li class="flex"> rows.
+  // Dash/square override the first span in each row; none hides it and removes the row gap.
+  const bulletRule =
+    theme.bulletStyle === "none"
+      ? `#resume-inner li.flex > span:first-child { display: none !important; } #resume-inner li.flex { gap: 0 !important; }`
+      : theme.bulletStyle === "dashes"
+        ? `#resume-inner li.flex > span:first-child { border-radius: 0 !important; height: 2px !important; width: 8px !important; margin-top: 7px !important; }`
+        : theme.bulletStyle === "squares"
+          ? `#resume-inner li.flex > span:first-child { border-radius: 0 !important; }`
+          : "";
+  // Headline lines: restyle every template's h2. Template keeps native look;
+  // rule/underline/none strip native decoration first, then apply the chosen style.
+  const stripNativeHeadings =
+    headingStyle === "rule" || headingStyle === "underline" || headingStyle === "none"
+      ? `#resume-inner h2 > span[class*="bg-"], #resume-inner h2 + span[class*="bg-"], #resume-inner h2 span.h-px, #resume-inner span.h-px, #resume-inner h2 span[class*="w-"] { display: none !important; } #resume-inner h2 { border: none !important; background: none !important; padding-bottom: 0 !important; }`
+      : "";
+  const applyHeadingStyle =
+    headingStyle === "rule"
+      ? `#resume-inner h2 { display: flex !important; align-items: center !important; gap: 8px !important; } #resume-inner h2::after { content: "" !important; display: block !important; width: auto !important; height: 2px !important; flex: 1 1 auto !important; background: var(--accent-fg) !important; }`
+      : headingStyle === "underline"
+        ? `#resume-inner h2 { border-bottom: 2px solid var(--accent-fg) !important; padding-bottom: 6px !important; }`
+        : "";
+  return [fontRule, bodyRule, lineRule, nameRule, headingRule, photoSizeRule, photoShapeRule, bulletRule, stripNativeHeadings, applyHeadingStyle]
+    .filter(Boolean)
+    .join("\n");
+}
+
 export function Preview() {
   const data = useResumeStore((state) => state.data);
   const templateId = useResumeStore((state) => state.templateId);
   const accent = useResumeStore((state) => state.accent);
+  const design = useResumeStore((state) => state.design);
   const contentHeight = useResumeStore((state) => state.contentHeight);
   const setContentHeight = useResumeStore((state) => state.setContentHeight);
 
@@ -47,16 +109,17 @@ export function Preview() {
     const observer = new ResizeObserver(measureHeight);
     observer.observe(inner);
     return () => observer.disconnect();
-  }, [data, templateId, accent, setContentHeight]);
+  }, [data, templateId, accent, design, setContentHeight]);
 
   const pageCount = estimatePageCount(contentHeight);
+  const overrideCss = designCss(design, templateId, Boolean(data.personal.photo?.trim()));
 
   return (
     <div
       ref={viewportRef}
       className="preview-viewport scrollbar-hidden relative min-h-0 min-w-0 w-full flex-1 overflow-auto bg-[#e8e8ed] p-3 sm:p-8"
     >
-      <div className="glass mx-auto mb-4 flex max-w-[794px] items-center justify-between rounded-full py-1.5 pl-3 pr-1.5 shadow-[0_2px_12px_rgba(0,0,0,0.08)] print:hidden">
+      <div className="glass mx-auto mb-4 flex max-w-198.5 items-center justify-between rounded-full py-1.5 pl-3 pr-1.5 shadow-[0_2px_12px_rgba(0,0,0,0.08)] print:hidden">
         <span className="flex items-center gap-2 text-[13px] font-medium text-[#1d1d1f]">
           <span
             className={
@@ -65,7 +128,7 @@ export function Preview() {
           />
           {pageCount === 1 ? "Single Page · A4" : `${pageCount} Pages · A4`}
         </span>
-        <span className="rounded-full bg-black/[0.05] px-2.5 py-1 text-[11px] font-semibold tabular-nums text-[#6e6e73]">
+        <span className="rounded-full bg-black/5 px-2.5 py-1 text-[11px] font-semibold tabular-nums text-[#6e6e73]">
           {Math.round(scale * 100)}%
         </span>
       </div>
@@ -76,7 +139,7 @@ export function Preview() {
       >
         <div
           id="resume-print"
-          className="relative overflow-hidden rounded-[4px] shadow-[0_8px_40px_rgba(0,0,0,0.18),0_2px_8px_rgba(0,0,0,0.12)] ring-1 ring-black/10"
+          className="relative overflow-hidden rounded-sm shadow-[0_8px_40px_rgba(0,0,0,0.18),0_2px_8px_rgba(0,0,0,0.12)] ring-1 ring-black/10"
           style={{ width: RESUME_WIDTH * scale, height: contentHeight * scale }}
         >
           <div
@@ -88,6 +151,7 @@ export function Preview() {
               transformOrigin: "top left",
             }}
           >
+            {overrideCss && <style>{overrideCss}</style>}
             <Resume data={data} templateId={templateId} accent={accent} />
           </div>
 

@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { DEFAULT_ACCENT, sampleData } from "@/lib/sample";
-import type { ListKey, Personal, ResumeData, TemplateId } from "@/lib/types";
+import { DEFAULT_DESIGN_THEME } from "@/lib/types";
+import type { DesignTheme, ListKey, Personal, ResumeData, TemplateId } from "@/lib/types";
 
 function uid(): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
@@ -83,12 +84,15 @@ export interface ResumeState {
   data: ResumeData;
   templateId: TemplateId;
   accent: string;
+  design: DesignTheme;
   welcomeOpen: boolean;
   /** Measured pixel height of the rendered A4 resume (transient — not persisted). */
   contentHeight: number;
 
   setTemplateId: (id: TemplateId) => void;
   setAccent: (accent: string) => void;
+  setDesign: (patch: Partial<DesignTheme>) => void;
+  resetDesign: () => void;
   setWelcomeOpen: (open: boolean) => void;
   setPersonal: (patch: Partial<Personal>) => void;
   setData: (data: ResumeData) => void;
@@ -113,11 +117,17 @@ export const useResumeStore = create<ResumeState>()(
       data: sampleData,
       templateId: "modern",
       accent: DEFAULT_ACCENT,
+      design: DEFAULT_DESIGN_THEME,
       welcomeOpen: false,
       contentHeight: 1123,
 
       setTemplateId: (templateId) => set({ templateId }),
       setAccent: (accent) => set({ accent }),
+      setDesign: (patch) =>
+        set((state) => ({
+          design: { ...state.design, ...patch },
+        })),
+      resetDesign: () => set({ design: DEFAULT_DESIGN_THEME }),
       setWelcomeOpen: (welcomeOpen) => set({ welcomeOpen }),
       setContentHeight: (contentHeight) => set({ contentHeight }),
 
@@ -168,11 +178,21 @@ export const useResumeStore = create<ResumeState>()(
     }),
     {
       name: "cv-builder",
-      version: 5,
+      version: 7,
       migrate: (persistedState) => {
-        const state = (persistedState ?? {}) as Partial<ResumeState>;
+        const state = (persistedState ?? {}) as Partial<ResumeState> & {
+          customTheme?: Partial<DesignTheme>;
+        };
         const data = (state.data ?? {}) as Partial<ResumeData>;
         const personal = (data.personal ?? {}) as Partial<Personal>;
+        // Drop legacy "custom" template id (Custom.tsx deleted) — fall back to modern.
+        const templateId = state.templateId === ("custom" as TemplateId) ? "modern" : (state.templateId ?? "modern");
+        // Map the short-lived dividerStyle toggle onto the new headingStyle choices.
+        const legacyDivider = (state as { dividerStyle?: string }).dividerStyle;
+        const headingStyle =
+          state.design?.headingStyle ?? (legacyDivider === "none" ? "none" : "template");
+        const persistedPhotoShape: string | undefined =
+          state.customTheme?.photoShape ?? state.design?.photoShape;
         return {
           ...state,
           data: {
@@ -195,8 +215,21 @@ export const useResumeStore = create<ResumeState>()(
             characterReferences: data.characterReferences ?? [],
             awards: data.awards ?? [],
           },
-          templateId: state.templateId ?? "modern",
+          templateId,
           accent: state.accent ?? DEFAULT_ACCENT,
+          design: {
+            ...DEFAULT_DESIGN_THEME,
+            ...(state.design ?? {}),
+            headingStyle,
+            // Tolerate the short-lived customTheme key from the reverted experiment.
+            ...(state.customTheme ?? {}),
+            photoShape:
+              persistedPhotoShape === "circle" ||
+              persistedPhotoShape === "rounded" ||
+              persistedPhotoShape === "square"
+                ? persistedPhotoShape
+                : DEFAULT_DESIGN_THEME.photoShape,
+          },
         };
       },
       // Persist only the resume content, not transient UI state (contentHeight).
@@ -204,6 +237,7 @@ export const useResumeStore = create<ResumeState>()(
         data: state.data,
         templateId: state.templateId,
         accent: state.accent,
+        design: state.design,
       }),
     }
   )

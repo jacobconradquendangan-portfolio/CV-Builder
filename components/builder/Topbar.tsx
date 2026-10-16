@@ -108,23 +108,23 @@ export function Topbar() {
   }, [downloadOpen]);
 
   return (
-    <header className="glass-strong sticky top-0 z-20 flex shrink-0 flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-black/[0.08] px-3 py-2.5 sm:px-5">
+    <header className="glass-strong sticky top-0 z-20 flex shrink-0 flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-black/8 px-3 py-2.5 sm:px-5">
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-2">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-gradient-to-b from-[#2c2c2e] to-black text-[13px] font-bold text-white shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-b from-[#2c2c2e] to-black text-[13px] font-bold text-white shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
             C
           </span>
           <h1 className="text-[17px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">
             CV Builder
           </h1>
-          <span className="rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73]">
-            v1.1.0
+          <span className="rounded-full bg-black/5 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73]">
+            v1.1.1
           </span>
           <a
             href="https://portfolio-website-v2-gray.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73] transition-colors hover:bg-black/10 hover:text-[#1d1d1f]"
+            className="inline-flex items-center gap-1 rounded-full bg-black/5 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#6e6e73] transition-colors hover:bg-black/10 hover:text-[#1d1d1f]"
           >
             Visit my portfolio
             <svg viewBox="0 0 24 24" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -140,7 +140,7 @@ export function Topbar() {
             <select
               value={templateId}
               onChange={(event) => setTemplateId(event.target.value as TemplateId)}
-              className="min-w-0 flex-1 cursor-pointer appearance-none rounded-full border border-black/10 bg-white/70 py-1.5 pl-3 pr-8 text-[13px] font-medium text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur transition-all duration-200 hover:bg-white focus:border-[#0071e3] focus:outline-none focus:ring-4 focus:ring-[#0071e3]/15 sm:max-w-[150px] sm:flex-none"
+              className="min-w-0 flex-1 cursor-pointer appearance-none rounded-full border border-black/10 bg-white/70 py-1.5 pl-3 pr-8 text-[13px] font-medium text-[#1d1d1f] shadow-[0_1px_2px_rgba(0,0,0,0.04)] backdrop-blur transition-all duration-200 hover:bg-white focus:border-[#0071e3] focus:outline-none focus:ring-4 focus:ring-[#0071e3]/15 sm:max-w-37.5 sm:flex-none"
               style={{
                 backgroundImage:
                   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236e6e73' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
@@ -175,7 +175,7 @@ export function Topbar() {
             </select>
           </label>
 
-          <div className="hidden items-center gap-1 rounded-full border border-black/[0.08] bg-white/60 px-1.5 py-1.5 backdrop-blur sm:flex" role="radiogroup" aria-label="Accent color">
+          <div className="hidden items-center gap-1 rounded-full border border-black/8 bg-white/60 px-1.5 py-1.5 backdrop-blur sm:flex" role="radiogroup" aria-label="Accent color">
             {ACCENTS.map((color) => {
               const isSelected = color.value.toLowerCase() === normalizedAccent;
               return (
@@ -194,7 +194,7 @@ export function Topbar() {
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "block h-[18px] w-[18px] rounded-full transition-all duration-200",
+                      "block h-4.5 w-4.5 rounded-full transition-all duration-200",
                       isSelected
                         ? "ring-2 ring-[#0071e3] ring-offset-2 ring-offset-white"
                         : "ring-1 ring-black/15"
@@ -222,7 +222,7 @@ export function Topbar() {
               <span
                 aria-hidden="true"
                 className={cn(
-                  "pointer-events-none flex h-[18px] w-[18px] items-center justify-center rounded-full text-[10px] font-bold",
+                  "pointer-events-none flex h-4.5 w-4.5 items-center justify-center rounded-full text-[10px] font-bold",
                   isCustomAccent
                     ? "bg-[conic-gradient(from_0deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)] ring-2 ring-[#0071e3] ring-offset-2 ring-offset-white"
                     : "bg-[conic-gradient(from_0deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)] ring-1 ring-black/15"
@@ -233,7 +233,7 @@ export function Topbar() {
         </div>
       </div>
 
-      <div className="grid w-full grid-cols-2 gap-2 border-t border-black/[0.06] pt-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
+      <div className="grid w-full grid-cols-2 gap-2 border-t border-black/6 pt-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end lg:w-auto lg:border-l lg:border-t-0 lg:pl-4 lg:pt-0">
         <input
           ref={pdfInputRef}
           type="file"
@@ -287,7 +287,7 @@ export function Topbar() {
             </svg>
           </button>
           {downloadOpen && (
-            <div role="menu" className="animate-fade absolute right-0 z-30 mt-2 w-60 overflow-hidden rounded-2xl border border-black/[0.08] bg-white/90 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+            <div role="menu" className="animate-fade absolute right-0 z-30 mt-2 w-60 overflow-hidden rounded-2xl border border-black/8 bg-white/90 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.16)] backdrop-blur-xl">
               <button
                 type="button"
                 role="menuitem"
@@ -295,7 +295,7 @@ export function Topbar() {
                   setDownloadOpen(false);
                   window.print();
                 }}
-                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[#1d1d1f] transition-colors hover:bg-black/[0.04]"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[#1d1d1f] transition-colors hover:bg-black/4"
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-[#0071e3]/10 text-[#0071e3]">
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -314,7 +314,7 @@ export function Topbar() {
                 type="button"
                 role="menuitem"
                 onClick={handleExportDocx}
-                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[#1d1d1f] transition-colors hover:bg-black/[0.04]"
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[#1d1d1f] transition-colors hover:bg-black/4"
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-[#34c759]/10 text-[#248a3d]">
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -347,7 +347,7 @@ export function Topbar() {
       {pdfImportError && (
         <div
           role="alert"
-          className="animate-rise fixed bottom-5 left-1/2 z-[70] flex w-[min(92vw,520px)] -translate-x-1/2 items-start justify-between gap-4 rounded-2xl border border-red-200 bg-white px-4 py-3 text-[13px] leading-relaxed text-red-700 shadow-[0_12px_40px_rgba(0,0,0,0.18)]"
+          className="animate-rise fixed bottom-5 left-1/2 z-70 flex w-[min(92vw,520px)] -translate-x-1/2 items-start justify-between gap-4 rounded-2xl border border-red-200 bg-white px-4 py-3 text-[13px] leading-relaxed text-red-700 shadow-[0_12px_40px_rgba(0,0,0,0.18)]"
         >
           <span>{pdfImportError}</span>
           <button

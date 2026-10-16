@@ -497,7 +497,7 @@ export function AtsCheckPanel() {
 
   return (
     <div className="animate-fade space-y-3">
-      <div className="rounded-2xl border border-black/[0.08] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+      <div className="rounded-2xl border border-black/8 bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
         <div className="flex items-center gap-2.5">
           <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", verdictDot)} />
           <p className="text-[15px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{verdict}</p>
@@ -507,12 +507,12 @@ export function AtsCheckPanel() {
         </p>
       </div>
 
-      <p className="rounded-2xl bg-black/[0.04] px-4 py-3 text-[12px] leading-relaxed text-[#6e6e73]">
+      <p className="rounded-2xl bg-black/4 px-4 py-3 text-[12px] leading-relaxed text-[#6e6e73]">
         A quick, opinionated review of how well your resume will survive automated applicant tracking
         systems. Adjust for the job you&apos;re applying to — a human reader still loves eye-catching layouts.
       </p>
 
-      <section className="rounded-2xl border border-black/[0.08] bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+      <section className="rounded-2xl border border-black/8 bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
         <div className="mb-2 flex items-center justify-between gap-2">
           <div>
             <h3 className="text-[15px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">Job keyword match</h3>
@@ -564,12 +564,12 @@ export function AtsCheckPanel() {
 
       <ul className="space-y-2">
         {checks.map((check) => (
-          <li key={check.id} className="rounded-2xl border border-black/[0.08] bg-white px-4 py-3 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-shadow duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+          <li key={check.id} className="rounded-2xl border border-black/8 bg-white px-4 py-3 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-shadow duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
             <div className="flex items-center gap-2.5">
               <StatusIcon status={check.status} />
               <span className="text-[13px] font-semibold tracking-[-0.01em] text-[#1d1d1f]">{check.label}</span>
             </div>
-            <p className="mt-1.5 pl-[28px] text-[12px] leading-relaxed text-[#6e6e73]">{check.note}</p>
+            <p className="mt-1.5 pl-7 text-[12px] leading-relaxed text-[#6e6e73]">{check.note}</p>
           </li>
         ))}
       </ul>
@@ -581,7 +581,7 @@ function StatusIcon({ status }: { status: Status }) {
   return (
     <span
       className={cn(
-        "flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white",
+        "flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white",
         status === "pass" && "bg-[#34c759]",
         status === "warn" && "bg-[#ff9f0a]",
         status === "fail" && "bg-[#ff3b30]"

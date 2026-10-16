@@ -85,6 +85,40 @@ export type ListKey =
 
 export type TemplateId = "modern" | "classic" | "minimal" | "sidebar" | "ats";
 
+export type DesignFontFamily = "sans" | "serif" | "mono" | "rounded";
+export type DesignPhotoShape = "circle" | "rounded" | "square";
+export type DesignBulletStyle = "dots" | "dashes" | "squares" | "none";
+export type DesignHeadingStyle = "template" | "rule" | "underline" | "none";
+
+/**
+ * Universal design settings applied on top of every template via a scoped
+ * `#resume-inner` style override (see Preview.tsx). Works without rewriting
+ * templates because ID-scoped selectors beat Tailwind utility classes.
+ */
+export interface DesignTheme {
+  fontFamily: DesignFontFamily;
+  baseSize: number;
+  nameSize: number;
+  headingSize: number;
+  lineHeight: number;
+  photoShape: DesignPhotoShape;
+  photoSize: number;
+  bulletStyle: DesignBulletStyle;
+  headingStyle: DesignHeadingStyle;
+}
+
+export const DEFAULT_DESIGN_THEME: DesignTheme = {
+  fontFamily: "sans",
+  baseSize: 12,
+  nameSize: 30,
+  headingSize: 11,
+  lineHeight: 1.6,
+  photoShape: "circle",
+  photoSize: 96,
+  bulletStyle: "dots",
+  headingStyle: "template",
+};
+
 export interface ResumeData {
   personal: Personal;
   experience: Experience[];

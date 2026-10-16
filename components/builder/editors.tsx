@@ -1,6 +1,7 @@
 "use client";
 
 import { useResumeStore } from "@/store/useResumeStore";
+import type { DesignBulletStyle, DesignFontFamily, DesignHeadingStyle, DesignPhotoShape } from "@/lib/types";
 import { ItemList } from "./ItemList";
 import { SelectField, TextArea, TextField } from "./controls";
 import { PhotoUploader } from "./PhotoUploader";
@@ -84,7 +85,7 @@ export function PersonalEditor() {
         onChange={(value) => setPersonal({ summary: value })}
         placeholder="Short introduction that sells your profile..."
       />
-      <p className="mt-5 rounded-2xl bg-[#0071e3]/[0.06] px-4 py-3 text-[13px] leading-relaxed text-[#1d1d1f]">
+      <p className="mt-5 rounded-2xl bg-[#0071e3]/6 px-4 py-3 text-[13px] leading-relaxed text-[#1d1d1f]">
         <span className="font-semibold">Tip —</span> <span className="text-[#3a3a3c]">click Download and choose Save as PDF for a print-ready document.</span>
       </p>
     </div>
@@ -492,5 +493,140 @@ export function AwardsEditor() {
         </div>
       )}
     </ItemList>
+  );
+}
+
+function Slider({ label, value, min, max, step, unit, onChange, disabled = false }: {
+  label: string; value: number; min: number; max: number; step: number; unit: string;
+  onChange: (value: number) => void; disabled?: boolean;
+}) {
+  return (
+    <label className={`mt-4 block${disabled ? " cursor-not-allowed opacity-50" : ""}`}>
+      <span className="flex items-center justify-between text-[12px] font-medium text-[#6e6e73]">
+        {label}
+        <span className="rounded-full bg-black/5 px-2 py-0.5 text-[11px] font-semibold tabular-nums text-[#1d1d1f]">
+          {value}{unit}
+        </span>
+      </span>
+      <input type="range" min={min} max={max} step={step} value={value}
+        disabled={disabled}
+        onChange={(event) => onChange(Number(event.target.value))}
+        className="mt-2 w-full accent-[#0071e3] disabled:cursor-not-allowed" />
+    </label>
+  );
+}
+
+function ChoiceRow<T extends string>({ label, value, options, onChange, disabled = false }: {
+  label: string; value: T; options: { value: T; label: string }[];
+  onChange: (value: T) => void; disabled?: boolean;
+}) {
+  return (
+    <div className="mt-4">
+      <span className={`text-[12px] font-medium text-[#6e6e73]${disabled ? " opacity-50" : ""}`}>{label}</span>
+      <div className="mt-1.5 flex flex-wrap gap-1.5" role="radiogroup" aria-label={label}>
+        {options.map((option) => (
+          <button key={option.value} type="button" role="radio" aria-checked={value === option.value}
+            disabled={disabled}
+            onClick={() => onChange(option.value)}
+            className={`${value === option.value
+              ? "rounded-full bg-[#0071e3] px-3 py-1.5 text-[12px] font-semibold text-white"
+              : "rounded-full bg-black/5 px-3 py-1.5 text-[12px] font-medium text-[#1d1d1f] hover:bg-black/10"} disabled:cursor-not-allowed disabled:opacity-50`}>
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DesignCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mt-4 rounded-2xl border border-black/8 bg-white px-4 pb-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+      <h3 className="pt-3 text-[13px] font-semibold text-[#1d1d1f]">{title}</h3>
+      {children}
+    </section>
+  );
+}
+
+export function DesignEditor() {
+  const theme = useResumeStore((state) => state.design);
+  const templateId = useResumeStore((state) => state.templateId);
+  const personal = useResumeStore((state) => state.data.personal);
+  const setDesign = useResumeStore((state) => state.setDesign);
+  const resetDesign = useResumeStore((state) => state.resetDesign);
+  const headlineLinesDisabled = templateId === "modern" || templateId === "sidebar";
+  const photoOptionsDisabled = !personal.photo?.trim();
+  return (
+    <div>
+      <p className="rounded-2xl bg-[#0071e3]/6 px-4 py-3 text-[13px] leading-relaxed text-[#1d1d1f]">
+        Applies to <span className="font-semibold">every template</span>. Changes preview live and print too.
+      </p>
+      <DesignCard title="Type">
+        <ChoiceRow<DesignFontFamily>
+          label="Font family" value={theme.fontFamily}
+          onChange={(fontFamily) => setDesign({ fontFamily })}
+          options={[
+            { value: "sans", label: "Sans" },
+            { value: "serif", label: "Serif" },
+            { value: "mono", label: "Mono" },
+            { value: "rounded", label: "Rounded" },
+          ]}
+        />
+        <Slider label="Body text" value={theme.baseSize} min={9} max={15} step={0.5} unit="px" onChange={(baseSize) => setDesign({ baseSize })} />
+        <Slider label="Name" value={theme.nameSize} min={20} max={44} step={1} unit="px" onChange={(nameSize) => setDesign({ nameSize })} />
+        <Slider label="Headings" value={theme.headingSize} min={9} max={16} step={0.5} unit="px" onChange={(headingSize) => setDesign({ headingSize })} />
+        <Slider label="Line spacing" value={theme.lineHeight} min={1.2} max={2} step={0.05} unit="" onChange={(lineHeight) => setDesign({ lineHeight })} />
+      </DesignCard>
+      <DesignCard title="Photo">
+        <ChoiceRow<DesignPhotoShape>
+          label="Photo shape" value={theme.photoShape}
+          onChange={(photoShape) => setDesign({ photoShape })}
+          disabled={photoOptionsDisabled}
+          options={[
+            { value: "circle", label: "Circle" },
+            { value: "rounded", label: "Rounded" },
+            { value: "square", label: "Square" },
+          ]}
+        />
+        {photoOptionsDisabled && (
+          <p className="mt-2 text-[11px] leading-relaxed text-[#6e6e73]">
+            Upload a profile photo in the Personal tab to enable photo styling.
+          </p>
+        )}
+        <Slider label="Photo size" value={theme.photoSize} min={48} max={160} step={4} unit="px" onChange={(photoSize) => setDesign({ photoSize })} disabled={photoOptionsDisabled} />
+      </DesignCard>
+      <DesignCard title="Bullets & lines">
+        <ChoiceRow<DesignBulletStyle>
+          label="Bullet style" value={theme.bulletStyle}
+          onChange={(bulletStyle) => setDesign({ bulletStyle })}
+          options={[
+            { value: "dots", label: "Dots" },
+            { value: "dashes", label: "Dashes" },
+            { value: "squares", label: "Squares" },
+            { value: "none", label: "None" },
+          ]}
+        />
+        <ChoiceRow<DesignHeadingStyle>
+          label="Headline lines" value={theme.headingStyle ?? "template"}
+          onChange={(headingStyle) => setDesign({ headingStyle })}
+          disabled={headlineLinesDisabled}
+          options={[
+            { value: "template", label: "Template" },
+            { value: "rule", label: "Rule" },
+            { value: "underline", label: "Underline" },
+            { value: "none", label: "None" },
+          ]}
+        />
+        {headlineLinesDisabled && (
+          <p className="mt-2 text-[11px] leading-relaxed text-[#6e6e73]">
+            Headline line styles aren&apos;t available with the {templateId === "modern" ? "Modern" : "Sidebar"} template.
+          </p>
+        )}
+      </DesignCard>
+      <button type="button" onClick={resetDesign}
+        className="mt-4 w-full rounded-2xl border border-black/10 bg-white px-3 py-2.5 text-[13px] font-medium text-[#6e6e73] hover:bg-black/3 hover:text-[#1d1d1f]">
+        Reset design to defaults
+      </button>
+    </div>
   );
 }

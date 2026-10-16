@@ -7,6 +7,9 @@ const STORAGE_KEY = "cv-builder-welcome-seen";
 
 const FEATURES = [
   "5 resume templates — Modern, Classic, Minimal, Sidebar & ATS-Friendly",
+  "Design tab — adjust fonts, sizes, spacing, bullets and photo styling",
+  "Headline line styles on Classic, Minimal and ATS-Friendly (not Modern or Sidebar)",
+  "Photo shape and size controls become available after you upload a photo",
   "10 accent colors plus a custom color picker (desktop toolbar)",
   "Optional photo upload (stored on your device only)",
   "Export as PDF (text-selectable) or DOCX (editable)",
@@ -18,7 +21,7 @@ const FEATURES = [
 
 const STEPS = [
   "Try Import PDF (Beta) in the toolbar to extract details and links from a text-based resume. Review the results before choosing whether to replace your CV. Scanned PDFs are not supported yet.",
-  "Style your resume — pick one of 5 templates and 10 accent colors (or any custom color via the rainbow picker on desktop); the preview updates live. Use the ATS panel for parser warnings and optional job-keyword coverage.",
+  "Style your resume — pick one of 5 templates and 10 accent colors (or any custom color via the rainbow picker on desktop). Choose a headline line style on Classic, Minimal or ATS-Friendly; upload a photo to customize its shape and size. The preview updates live.",
   "Download — click Download and choose PDF (text-selectable, print-ready) or DOCX (editable in Word / Google Docs).",
 ];
 
@@ -70,7 +73,7 @@ export function WelcomeModal() {
         className="welcome-modal-scroll animate-rise max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-[20px] bg-white/95 shadow-[0_24px_80px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:max-h-[min(90vh,680px)]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="bg-gradient-to-b from-[#1d1d1f] to-[#3a3a3c] px-6 pb-6 pt-7 text-white sm:px-8">
+        <div className="bg-linear-to-b from-[#1d1d1f] to-[#3a3a3c] px-6 pb-6 pt-7 text-white sm:px-8">
           <span className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur">
             Privacy-first · On-device only
           </span>
@@ -93,7 +96,7 @@ export function WelcomeModal() {
                 key={feature}
                 className="flex items-start gap-2.5 rounded-2xl bg-[#f5f5f7] px-3 py-2.5"
               >
-                <span className="mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[#34c759] text-[10px] font-bold text-white">
+                <span className="mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-[#34c759] text-[10px] font-bold text-white">
                   ✓
                 </span>
                 <span className="text-[13px] leading-snug text-[#1d1d1f]">{feature}</span>
@@ -140,7 +143,7 @@ export function WelcomeModal() {
           </div>
         </div>
 
-        <div className="border-t border-black/[0.06] bg-white/60 px-6 py-4 backdrop-blur sm:px-8">
+        <div className="border-t border-black/6 bg-white/60 px-6 py-4 backdrop-blur sm:px-8">
           <button
             type="button"
             onClick={close}

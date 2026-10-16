@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { cn, normalizeExternalUrl, prettyDate } from "@/lib/utils";
 
 // Re-exported for backwards compatibility (older imports resolve via primitives).
@@ -76,7 +77,7 @@ export function BulletList({
     <ul className="mt-1.5 space-y-1">
       {lines.map((line, index) => (
         <li key={index} className="flex gap-2 leading-relaxed">
-          <span className={cn("mt-[6px] h-1 w-1 shrink-0 rounded-full", dotClassName ?? "bg-current opacity-60")} />
+          <span className={cn("mt-1.5 h-1 w-1 shrink-0 rounded-full", dotClassName ?? "bg-current opacity-60")} />
           <span className={textClassName}>{line}</span>
         </li>
       ))}
@@ -85,7 +86,7 @@ export function BulletList({
 }
 
 /** Renders a circular profile photo — returns null when no photo is set. */
-export function Photo({ src, className }: { src?: string; className?: string }) {
+export function Photo({ src, className, style }: { src?: string; className?: string; style?: CSSProperties }) {
   if (!src || !src.trim()) return null;
   return (
     // A plain img is required here: resume photos can be local data: URLs
@@ -96,6 +97,7 @@ export function Photo({ src, className }: { src?: string; className?: string }) 
       alt=""
       aria-hidden="true"
       className={cn("rounded-full object-cover", className)}
+      style={style}
       onError={(event) => {
         event.currentTarget.style.visibility = "hidden";
       }}

@@ -5,6 +5,8 @@ A fast, privacy-first resume and CV builder built with **Next.js**, **TypeScript
 ## Features
 
 - **Five templates** — Modern, Classic, Minimal, Sidebar, and ATS-Friendly
+- **Design tab** — adjust font family and text sizes, line spacing, and bullet style across templates; headline line styles are available on Classic, Minimal, and ATS-Friendly (not Modern or Sidebar)
+- **Photo styling** — customize photo shape and size after uploading a profile photo
 - **ATS self-check** — live pass/warn/fail review of parser risks (layout, missing sections, bullet length, page count)
 - **Job keyword coverage** — paste a job description to compare keywords against your resume
 - **Live A4 preview** — pixel-accurate, scaled editor with page-break indicators
@@ -69,6 +71,14 @@ vercel
 Released under the [MIT License](LICENSE). Copyright (c) 2026 Jacob Conrad Quendangan.
 
 ## Changelog
+
+### v1.1.1
+
+- Made headline line styles template-aware: Modern and Sidebar disable the control, while Classic, Minimal, and ATS-Friendly support it
+- Updated the Rule style to place an accent line beside the section title, extending to the content edge
+- Applied the selected font family consistently on Classic, including Sans
+- Disabled photo styling until a photo is uploaded and removed the Hidden photo shape option
+- Updated the welcome guide and documentation to describe design control availability accurately
 
 ### v1.1.0
 
