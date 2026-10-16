@@ -1,26 +1,57 @@
+<div align="center">
+
 # CV Builder
 
-A fast, privacy-first resume and CV builder built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **Zustand**. Enter your details, switch between five professional templates, run an ATS self-check, and export a print-ready **PDF** or editable **DOCX** — entirely client-side.
+### A considered workspace for your next career move.
+
+Build and refine your resume with live previews, practical ATS checks, and flexible exports.
+Your resume stays in your browser.
+
+<br />
+
+[![Version](https://img.shields.io/badge/version-1.1.1-2563eb?style=flat-square)](package.json)
+[![Next.js](https://img.shields.io/badge/Next.js-16.3.4-111111?style=flat-square&logo=next.js)](package.json)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript&logoColor=white)](package.json)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06b6d4?style=flat-square&logo=tailwindcss&logoColor=white)](package.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-16a34a?style=flat-square)](LICENSE)
+
+<br />
+
+[Features](#features) · [Quick start](#quick-start) · [Guide](#using-the-builder) · [Project structure](#project-structure)
+
+</div>
+
+---
+
+## At a glance
+
+CV Builder is a responsive resume editor built with **Next.js**, **React**, **TypeScript**, **Tailwind CSS**, and **Zustand**. Create a resume, preview it as an A4 document, review common ATS considerations, and export a PDF or editable DOCX—all in one browser-based workspace.
+
+Resume details and uploaded photos are saved in browser storage. PDF import and job-keyword comparison run locally on your device.
 
 ## Features
 
-- **Five templates** — Modern, Classic, Minimal, Sidebar, and ATS-Friendly
-- **Design tab** — adjust font family and text sizes, line spacing, and bullet style across templates; headline line styles are available on Classic, Minimal, and ATS-Friendly (not Modern or Sidebar)
-- **Photo styling** — customize photo shape and size after uploading a profile photo
-- **ATS self-check** — live pass/warn/fail review of parser risks (layout, missing sections, bullet length, page count)
-- **Job keyword coverage** — paste a job description to compare keywords against your resume
-- **Live A4 preview** — pixel-accurate, scaled editor with page-break indicators
-- **Accent color picker** — 10 presets plus a custom color picker (desktop toolbar) to restyle the document
-- **Custom link labels** — use a short display name for your website, LinkedIn, and project links instead of showing full URLs
-- **PDF export** — vector, text-selectable output via the browser print dialog
-- **DOCX export** — editable file compatible with Word, Google Docs, LibreOffice, and Pages
-- **PDF import (Beta)** — extract text, links, and common resume sections on-device; review the preview before choosing whether to replace your current CV (scanned PDFs are not supported yet)
-- **Full data model** — personal info, summary, experience, education, projects, skills, languages, certifications, awards, and character references
-- **Auto-save** — all data persists to `localStorage`
-- **Privacy-first** — your resume and photos never leave the browser
-- **Responsive** — collapsible editor/preview, mobile ATS drawer, full-width preview on small screens
+| Capability | Description |
+| --- | --- |
+| **Five resume templates** | Modern, Classic, Minimal, Sidebar, and ATS-Friendly. |
+| **Design controls** | Choose a font and adjust text size, spacing, bullets, and accent color. |
+| **Headline styling** | Customize headline lines on Classic, Minimal, and ATS-Friendly. Modern and Sidebar keep their native heading treatment. |
+| **Photo styling** | Upload an optional photo, then customize its shape and size. |
+| **Live A4 preview** | See edits immediately, with page count and page-break indicators. |
+| **ATS review** | Review common parsing considerations, including layout, content, and resume length. |
+| **Job-keyword comparison** | Compare resume text with a job description using a local heuristic—not a guarantee of ATS results. |
+| **PDF import (Beta)** | Extract text and links from text-based PDFs. Review results before replacing your resume. Scanned PDFs are not supported. |
+| **PDF and DOCX export** | Save a text-selectable PDF or an editable DOCX document. |
+| **Privacy-first workflow** | Resume content, photos, PDF import, and keyword comparisons stay on your device. |
 
-## Getting started
+## Quick start
+
+### Requirements
+
+- Node.js
+- npm
+
+### Install dependencies and start the development server
 
 ```bash
 npm install
@@ -29,98 +60,87 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Other scripts:
+### Project scripts
 
-| Command           | Description                  |
-| ----------------- | ---------------------------- |
-| `npm run build`   | Production build             |
-| `npm run start`   | Run the production build     |
-| `npm run lint`    | Run ESLint                   |
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the local development server. |
+| `npm run lint` | Run ESLint. |
+| `npm run build` | Create a production build. |
+| `npm run start` | Serve the production build locally. |
 
-## Importing a resume PDF (Beta)
+## Using the builder
 
-Choose **Import PDF** in the builder toolbar and select a text-based PDF. The importer extracts selectable text, links, and common resume sections locally in your browser. Review the detected information before choosing **Replace current CV**; canceling leaves your current resume unchanged. Your profile photo is kept when you replace the resume.
+1. **Enter or import your details.** PDF import is in beta and supports text-based PDFs only; review its results before replacing your current resume.
+2. **Choose a template and refine the design.** Use the live preview to review your changes. Photo styling controls are available after uploading a photo.
+3. **Review and export.** Use the optional ATS and keyword checks, then choose PDF or DOCX from the Download menu.
 
-Scanned or image-only PDFs are not supported yet. Extraction is in beta, so check the preview and edit any details that were missed or grouped incorrectly before replacing your CV.
+### PDF output
 
-## Exporting
+Choose **Save as PDF** in the Download menu. In the browser print dialog, select **Save as PDF**, set the paper size to **A4**, and set margins to **None** for the intended page layout.
 
-**PDF** — Click **Download PDF** (or `Ctrl/Cmd + P`). In the print dialog, choose **Save as PDF**, set paper size to **A4**, and margins to **None**. The resume renders as real DOM/CSS, so the output keeps vector text and exact colors.
+### DOCX output
 
-**DOCX** — Click **Export DOCX** to download an editable `.docx` file with all sections formatted with headings, bullet points, and right-aligned dates.
+Choose **Save as DOCX** to download an editable document compatible with Microsoft Word and other DOCX editors.
 
-## Deploying to Vercel
+## Privacy
 
-Everything is static and client-side, so deploying is trivial:
+Resume content and uploaded images are stored in browser storage on the current device. PDF import and job-keyword comparison are processed locally in the browser. CV Builder does not send resume content to an application backend.
 
-1. Push this repository to GitHub/GitLab/Bitbucket.
-2. Import it into [Vercel](https://vercel.com/new) — the framework preset **Next.js** is detected automatically.
-3. Click **Deploy**.
+## Deployment
 
-No environment variables or serverless functions are required.
-
-You can also deploy via the CLI:
-
-```bash
-npm i -g vercel
-vercel
-```
-
-## License
-
-Released under the [MIT License](LICENSE). Copyright (c) 2026 Jacob Conrad Quendangan.
-
-## Changelog
-
-### v1.1.1
-
-- Made headline line styles template-aware: Modern and Sidebar disable the control, while Classic, Minimal, and ATS-Friendly support it
-- Updated the Rule style to place an accent line beside the section title, extending to the content edge
-- Applied the selected font family consistently on Classic, including Sans
-- Disabled photo styling until a photo is uploaded and removed the Hidden photo shape option
-- Updated the welcome guide and documentation to describe design control availability accurately
-
-### v1.1.0
-
-- Refined interface — frosted-glass topbar, pill buttons, segmented tabs, refined cards, and updated Preview / ATS / Welcome surfaces (resume templates and PDF/DOCX output unchanged)
-- Fixed Classic template missing the Certifications section
-- Fixed page-count math shared between Preview and ATS Check (`lib/utils.ts` single source of truth)
-- Hardened persisted-state migration against corrupt `localStorage`
-- Cleaned up ItemList toggle and PhotoUploader type check
-- Moved `prettyDate` into `lib/utils.ts` (re-exported from primitives for compatibility)
+Deploy on [Vercel](https://vercel.com/new) with the **Next.js** framework preset and the default build settings. No environment variables are required for the current application.
 
 ## Project structure
 
-```
-app/                     # Next.js app router (root page + layout + globals.css)
+```text
+app/
+  layout.tsx                 Root layout and metadata
+  page.tsx                   Application entry point
+  globals.css                Global styles and print rules
 components/
-  BuilderPage.tsx        # 3-column layout: editor | live preview | ATS check
+  BuilderPage.tsx            Main editor, preview, and ATS layout
   builder/
-    Topbar.tsx           # Template picker, accent colors, help, and download actions
-    FormPanel.tsx        # Tabbed data-entry panel (left column)
-    AtsCheckPanel.tsx    # Live ATS self-check and local keyword coverage (right column)
-    editors.tsx          # Section editors (personal, experience, …)
-    controls.tsx         # TextField, TextArea, SelectField building blocks
-    ItemList.tsx         # Reusable add / remove / reorder list editor
-    Preview.tsx          # Scaled A4 live preview (center column) + print root
+    Topbar.tsx               Template, accent, import, and export actions
+    FormPanel.tsx            Resume editor tabs
+    editors.tsx              Resume section and design editors
+    AtsCheckPanel.tsx        ATS review and local keyword comparison
+    Preview.tsx              Live A4 preview and print rendering
+    WelcomeModal.tsx         First-use guide
   resume/
-    Resume.tsx           # Template registry + selector
-    primitives.tsx       # Shared BulletList, DateRange, date helpers
-    templates/           # Modern, Classic, Minimal, Sidebar, Ats
+    Resume.tsx               Template registry
+    primitives.tsx           Shared resume elements
+    templates/               Modern, Classic, Minimal, Sidebar, and ATS
 lib/
-  types.ts               # Data model + shared types
-  sample.ts              # Sample resume data
-  utils.ts               # cn() class helper
-  exportDocx.ts          # DOCX (Office Open XML) export generator
+  types.ts                   Resume and design types
+  sample.ts                  Sample resume content
+  utils.ts                   Shared utilities
+  exportDocx.ts              DOCX generation
+  importResumePdf.ts         Local PDF text extraction
 store/
-  useResumeStore.ts      # Zustand store with localStorage persistence
+  useResumeStore.ts          Resume state and browser persistence
 ```
 
-## Adding a new template
+## Changelog
 
-1. Create `components/resume/templates/YourTemplate.tsx` exporting a component typed as `TemplateProps` (receives `data` and `accent`).
-2. Register it in `components/resume/Resume.tsx` under a new `TemplateId`.
-3. Add your `TemplateId` to the `TemplateId` union in `lib/types.ts`.
-4. Add an option to the topbar dropdown in `components/builder/Topbar.tsx`.
+### 1.1.1
 
-Templates are plain React + CSS, so anything that uses Tailwind utilities will appear identically in the exported PDF.
+- Added template-aware design controls and headline styling.
+- Improved typography resizing and applied selected fonts consistently across templates.
+- Refined the Rule headline style and photo styling controls.
+- Updated the welcome guide and project documentation.
+
+### 1.1.0
+
+- Refined the top bar, editor tabs, cards, preview, ATS panel, and welcome experience.
+- Fixed the missing Certifications section in Classic.
+- Centralized page-count calculations and hardened persisted-state migration.
+- Improved item-list behavior and photo uploader typing.
+
+## Contributing
+
+Found a problem or have an idea? Open an issue in [GitHub Issues](https://github.com/jacobconradquendangan-portfolio/CV-Builder/issues). Include the steps to reproduce a bug and the browser you’re using.
+
+## License
+
+Released under the [MIT License](LICENSE).
