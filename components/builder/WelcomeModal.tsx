@@ -6,23 +6,16 @@ import { useResumeStore } from "@/store/useResumeStore";
 const STORAGE_KEY = "cv-builder-welcome-seen";
 
 const FEATURES = [
-  "5 resume templates — Modern, Classic, Minimal, Sidebar & ATS-Friendly",
-  "Design tab — adjust fonts, sizes, spacing, bullets and photo styling",
-  "Headline line styles on Classic, Minimal and ATS-Friendly (not Modern or Sidebar)",
-  "Photo shape and size controls become available after you upload a photo",
-  "10 accent colors plus a custom color picker (desktop toolbar)",
-  "Optional photo upload (stored on your device only)",
-  "Export as PDF (text-selectable) or DOCX (editable)",
-  "NEW · PDF import (Beta) — extract resume details and links from a text-based PDF, review them, then choose whether to replace your CV",
-  "Live ATS self-check panel on the right",
-  "Optional job-description keyword coverage check — processed on this device",
-  "Your resume details and images stay in this browser — nothing is sent to or collected by this app",
+  "Five templates with live controls for fonts, spacing, colors, and photos.",
+  "Import a text-based PDF (Beta) and review it before replacing your resume.",
+  "Check ATS readiness and compare job keywords privately on your device.",
+  "Export a text-selectable PDF or editable DOCX. Your data stays in this browser.",
 ];
 
 const STEPS = [
-  "Try Import PDF (Beta) in the toolbar to extract details and links from a text-based resume. Review the results before choosing whether to replace your CV. Scanned PDFs are not supported yet.",
-  "Style your resume — pick one of 5 templates and 10 accent colors (or any custom color via the rainbow picker on desktop). Choose a headline line style on Classic, Minimal or ATS-Friendly; upload a photo to customize its shape and size. The preview updates live.",
-  "Download — click Download and choose PDF (text-selectable, print-ready) or DOCX (editable in Word / Google Docs).",
+  "Add your details or import a text-based PDF. Scanned PDFs aren’t supported yet.",
+  "Choose a template and customize it; the preview updates as you edit.",
+  "Download a print-ready PDF or editable DOCX.",
 ];
 
 export function WelcomeModal() {
