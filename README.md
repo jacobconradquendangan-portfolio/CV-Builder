@@ -1,13 +1,8 @@
 <div align="center">
+  <img src="assets/nameplate.svg" alt="CV Builder — Resume Builder, ATS Review, PDF &amp; DOCX Export" width="900" />
+</div>
 
-# CV Builder
-
-### A considered workspace for your next career move.
-
-Build and refine your resume with live previews, practical ATS checks, and flexible exports.
-Your resume stays in your browser.
-
-<br />
+<div align="center">
 
 [![Version](https://img.shields.io/badge/version-1.1.1-2563eb?style=flat-square)](package.json)
 [![Next.js](https://img.shields.io/badge/Next.js-16.3.4-111111?style=flat-square&logo=next.js)](package.json)
@@ -17,7 +12,14 @@ Your resume stays in your browser.
 
 <br />
 
-[Features](#features) · [Quick start](#quick-start) · [Guide](#using-the-builder) · [Project structure](#project-structure)
+**A considered workspace for your next career move.**
+
+Build and refine your resume with live previews, practical ATS checks, and flexible
+exports — your resume stays in your browser.
+
+<br />
+
+[Features](#features) · [Quick start](#quick-start) · [Guide](#using-the-builder) · [Privacy](#privacy) · [Project structure](#project-structure)
 
 </div>
 
@@ -25,9 +27,24 @@ Your resume stays in your browser.
 
 ## At a glance
 
-CV Builder is a responsive resume editor built with **Next.js**, **React**, **TypeScript**, **Tailwind CSS**, and **Zustand**. Create a resume, preview it as an A4 document, review common ATS considerations, and export a PDF or editable DOCX—all in one browser-based workspace.
+CV Builder is a responsive resume editor built with **Next.js**, **React**, **TypeScript**,
+**Tailwind CSS**, and **Zustand**. Create a resume, preview it as an A4 document, review common
+ATS considerations, and export a PDF or editable DOCX — all in one browser-based workspace.
 
-Resume details and uploaded photos are saved in browser storage. PDF import and job-keyword comparison run locally on your device.
+Resume details and uploaded photos are saved in browser storage. PDF import and job-keyword
+comparison run locally on your device.
+
+### Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | Next.js 16 (App Router) · React |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS v4 |
+| State | Zustand (with browser persistence) |
+| Export | Client-side PDF (print) and DOCX generation |
+
+---
 
 ## Features
 
@@ -39,10 +56,12 @@ Resume details and uploaded photos are saved in browser storage. PDF import and 
 | **Photo styling** | Upload an optional photo, then customize its shape and size. |
 | **Live A4 preview** | See edits immediately, with page count and page-break indicators. |
 | **ATS review** | Review common parsing considerations, including layout, content, and resume length. |
-| **Job-keyword comparison** | Compare resume text with a job description using a local heuristic—not a guarantee of ATS results. |
+| **Job-keyword comparison** | Compare resume text with a job description using a local heuristic — not a guarantee of ATS results. |
 | **PDF import (Beta)** | Extract text and links from text-based PDFs. Review results before replacing your resume. Scanned PDFs are not supported. |
 | **PDF and DOCX export** | Save a text-selectable PDF or an editable DOCX document. |
 | **Privacy-first workflow** | Resume content, photos, PDF import, and keyword comparisons stay on your device. |
+
+---
 
 ## Quick start
 
@@ -69,27 +88,43 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run build` | Create a production build. |
 | `npm run start` | Serve the production build locally. |
 
+---
+
 ## Using the builder
 
-1. **Enter or import your details.** PDF import is in beta and supports text-based PDFs only; review its results before replacing your current resume.
-2. **Choose a template and refine the design.** Use the live preview to review your changes. Photo styling controls are available after uploading a photo.
-3. **Review and export.** Use the optional ATS and keyword checks, then choose PDF or DOCX from the Download menu.
+1. **Enter or import your details.** PDF import is in beta and supports text-based PDFs only;
+   review its results before replacing your current resume.
+2. **Choose a template and refine the design.** Use the live preview to review your changes.
+   Photo styling controls are available after uploading a photo.
+3. **Review and export.** Use the optional ATS and keyword checks, then choose PDF or DOCX from
+   the Download menu.
 
 ### PDF output
 
-Choose **Save as PDF** in the Download menu. In the browser print dialog, select **Save as PDF**, set the paper size to **A4**, and set margins to **None** for the intended page layout.
+Choose **Save as PDF** in the Download menu. In the browser print dialog, select **Save as PDF**,
+set the paper size to **A4**, and set margins to **None** for the intended page layout.
 
 ### DOCX output
 
-Choose **Save as DOCX** to download an editable document compatible with Microsoft Word and other DOCX editors.
+Choose **Save as DOCX** to download an editable document compatible with Microsoft Word and other
+DOCX editors.
+
+---
 
 ## Privacy
 
-Resume content and uploaded images are stored in browser storage on the current device. PDF import and job-keyword comparison are processed locally in the browser. CV Builder does not send resume content to an application backend.
+Resume content and uploaded images are stored in browser storage on the current device. PDF import
+and job-keyword comparison are processed locally in the browser. CV Builder does not send resume
+content to an application backend.
+
+---
 
 ## Deployment
 
-Deploy on [Vercel](https://vercel.com/new) with the **Next.js** framework preset and the default build settings. No environment variables are required for the current application.
+Deploy on [Vercel](https://vercel.com/new) with the **Next.js** framework preset and the default
+build settings. No environment variables are required for the current application.
+
+---
 
 ## Project structure
 
@@ -121,6 +156,8 @@ store/
   useResumeStore.ts          Resume state and browser persistence
 ```
 
+---
+
 ## Changelog
 
 ### 1.1.1
@@ -137,10 +174,19 @@ store/
 - Centralized page-count calculations and hardened persisted-state migration.
 - Improved item-list behavior and photo uploader typing.
 
+---
+
 ## Contributing
 
-Found a problem or have an idea? Open an issue in [GitHub Issues](https://github.com/jacobconradquendangan-portfolio/CV-Builder/issues). Include the steps to reproduce a bug and the browser you’re using.
+Found a problem or have an idea? Open an issue in [GitHub Issues](https://github.com/jacobconradquendangan-portfolio/CV-Builder/issues).
+Include the steps to reproduce a bug and the browser you're using.
+
+---
 
 ## License
 
 Released under the [MIT License](LICENSE).
+
+<div align="center">
+  <sub>Built by <strong>Jacob Conrad M. Quendangan</strong></sub>
+</div>
